@@ -54,7 +54,7 @@ const loginEmployee = async (req, res, next) => {
   try {
     let user = await User.findOne({ email }).select('email password _id');
 
-    // if user with the email provided by client does not exist => return a response
+    // if user with the email provided by client app does not exist => return a response
     if (!user) {
       return res
         .status(404)

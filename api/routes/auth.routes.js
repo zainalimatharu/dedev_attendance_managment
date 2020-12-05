@@ -1,3 +1,4 @@
+// importing required modules & packages
 const express = require('express');
 const authRouter = express.Router();
 
@@ -8,7 +9,7 @@ const {
 } = require('../controllers/auth.controllers');
 
 // 1-> route to sign an admin into the app and get token
-// 1-> route to sign an employee into the app and get token
+// 2-> route to sign an employee into the app and get token
 authRouter.post('/login_admin', loginAdmin);
 authRouter.post('/login_employee', loginEmployee);
 

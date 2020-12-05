@@ -1,3 +1,4 @@
+// importing required modules and packages
 const express = require('express');
 const timeRouter = express.Router();
 
@@ -7,11 +8,13 @@ const {
   setDeparture,
 } = require('../controllers/duration.controllers');
 
-// 1-> route to register an admin
-// 1-> route to sign an admin into the app and get token
-// 1-> route to register an employee
-// 1-> route to sign an employee into the app and get token
-timeRouter.post('/set_arrival', setArrival);
-timeRouter.post('/set_departure', setDeparture);
+// importing required middlewares
+const auth = require('../middlewares/auth');
+// const isAdmin = require('../middlewares/isAdmin');
+
+// 1-> set arrival time of a user (either be an employee or ad admin)
+// 2-> set departure time of a user (either be an employee or ad admin)
+timeRouter.post('/set_arrival/:userId', auth, setArrival);
+timeRouter.patch('/set_departure/:userId', auth, setDeparture);
 
 module.exports = timeRouter;

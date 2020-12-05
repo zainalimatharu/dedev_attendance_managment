@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const moment = require('moment');
 
 const durationSchema = Schema({
   user: {
@@ -7,7 +8,7 @@ const durationSchema = Schema({
     ref: 'user',
     required: true,
   },
-  arrivalTime: { type: Date, default: Date.now() },
+  arrivalTime: { type: Date, required: true },
   departureTime: { type: Date },
 });
 
