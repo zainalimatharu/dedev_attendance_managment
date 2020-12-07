@@ -3,14 +3,9 @@ const express = require('express');
 const authRouter = express.Router();
 
 // importing requied controllers
-const {
-  loginAdmin,
-  loginEmployee,
-} = require('../controllers/auth.controllers');
+const { login } = require('../controllers/auth.controllers');
 
-// 1-> route to sign an admin into the app and get token
-// 2-> route to sign an employee into the app and get token
-authRouter.post('/login_admin', loginAdmin);
-authRouter.post('/login_employee', loginEmployee);
+// 1-> route to sign into the app and get token
+authRouter.post('/login', login);
 
 module.exports = authRouter;

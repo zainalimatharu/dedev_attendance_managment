@@ -7,19 +7,9 @@ const Duration = require('../models/duration.model');
 // importing helper functions
 const { calculateToday } = require('../helpers/calculateDuration');
 
+// set the arrival time of a user
 const setArrival = async (req, res, next) => {
   try {
-    // res.json({
-    //   dateToStore: moment().utc(true),
-    //   datedefault: new Date(),
-    // });
-    // const now = new Date();
-    // if (req.user.admin === true) {
-    //   console.log(req.user);
-    // } else {
-    //   console.log('Not an admin');
-    // }
-
     const { userId } = req.params;
 
     // if the person setting arrival time is logged in
@@ -27,6 +17,9 @@ const setArrival = async (req, res, next) => {
     // Otherwise, a "Not authorized" message will be sent
     // Even admin can't set an employee's arrival time
     if (req.user.id === userId) {
+      // if user has already set his arrival time,
+      // he won't be able to set his arrival time again.
+      // instead, will be given a response of 409; conflict
       let arrived = await Duration.find({
         user: userId,
         arrivalTime: {
@@ -36,15 +29,13 @@ const setArrival = async (req, res, next) => {
       });
 
       if (arrived.length > 0)
-        return res.json({ message: 'Arrival Time already set' });
+        return res.statua(409).json({ message: 'Arrival Time already set' });
 
+      // if user has not already set his arrival time
+      // set his arrival time by creating a document ni database
       let duration = new Duration({
         user: userId,
         arrivalTime: moment().utc(true),
-        // arrivalTime: moment().utc(true),
-        // arrivalTime: new Date(
-        //   `${now.getFullYear}-${now.getMonth}-${now.getDay} GMT+5`
-        // ),
       });
 
       duratioan = await duration.save();
@@ -63,18 +54,6 @@ const setArrival = async (req, res, next) => {
 
 const setDeparture = async (req, res, next) => {
   try {
-    // let arrived = await Duration.find({
-    //   user: userId,
-    //   arrivalTime: {
-    //     $lte: moment().utc(true).valueOf(),
-    //     $gte: moment('2020-12-04').utc(true).valueOf(),
-    //   },
-    // });
-
-    // if (arrived.length < 0) {
-    //   return res.json({ message: 'Arrival time not set' });
-    // }
-
     const { userId } = req.params;
 
     // if the person setting departure time is logged in
@@ -94,11 +73,13 @@ const setDeparture = async (req, res, next) => {
         { new: true }
       );
 
+      // if the arrival time of a user has not been set yet
+      // send a response of status of 409
       if (result === null) {
-        return res.json({ message: 'Arrival time not set' });
+        return res.status(409).json({ message: 'Arrival time not set' });
       }
 
-      res.json({
+      res.status(200).json({
         message: 'Departure time set',
         data: {
           _id: result._id,
@@ -110,7 +91,6 @@ const setDeparture = async (req, res, next) => {
     } else {
       res.status(401).json({ message: 'Not Authorized' });
     }
-    // write the logic
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });

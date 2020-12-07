@@ -1,0 +1,31 @@
+.nav {
+  height: 65px;
+  background-color: #474a59;
+  color: #ffffff;
+  padding: 0px 5vw;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  grid-column-gap: 1vw;
+}
+.nav hr {
+  margin: 4px 0px;
+}
+.nav a {
+  color: #ffffff;
+  text-decoration: none;
+}
+.nav .logo hr {
+  margin: 0px 0px;
+}
+.nav .logo span {
+  display: inline;
+}
+.nav .nav-block {
+  padding: 0px 5px;
+}
+.nav .nav-block:hover {
+  background-color: #858897;
+  transition: 0.5s;
+  cursor: pointer;
+}

@@ -24,8 +24,10 @@ app.use('/auth', authRoutes);
 app.use('/duration', durationRoutes);
 app.use('/report', reportRoutes);
 
+// set post
 app.set('port', process.env.PORT || 8088);
 
+// create server
 const server = http.createServer(app);
 server.listen(app.get('port'), () =>
   console.log(`Server started on port ${app.get('port')}`)
