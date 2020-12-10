@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import './style.css';
 import { connect } from 'react-redux';
 import { login } from '../../redux/actions/auth';
+import { Redirect } from 'react-router-dom';
 
-const AddEmployee = ({ login }) => {
+const AddEmployee = ({
+  auth: { isAuthenticated, loading, systemRole },
+  login,
+}) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -89,7 +93,17 @@ const AddEmployee = ({ login }) => {
     setErrors({ ...errors, [e.target.name]: '' });
   };
 
-  return (
+  // if (!loading && isAuthenticated) {
+  //   return systemRole === 'admin' ? (
+  //     <Redirect to="/dashboard" />
+  //   ) : (
+  //     systemRole === 'employee' && <Redirect to="/dashboard" />
+  //   );
+  // }
+
+  return loading ? (
+    'loading...'
+  ) : (
     <div className="login">
       <div className="container">
         <div className="login-heading">
@@ -141,6 +155,8 @@ const AddEmployee = ({ login }) => {
   );
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
 
 export default connect(mapStateToProps, { login })(AddEmployee);

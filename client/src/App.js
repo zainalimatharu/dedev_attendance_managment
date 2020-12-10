@@ -1,30 +1,25 @@
-import React from 'react';
-import {
-  BrowserRouter,
-  withRouter,
-  Route,
-  Switch,
-  Redirect,
-} from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import './App.css';
-import Login from './components/Login/Login';
 import Nav from './components/Nav/Nav';
-import AddEmployee from './components/AddEmployee/AddEmployee';
+import Router from './components/Router';
 
 import { Provider } from 'react-redux';
 import store from './redux/store/store.js';
+import { getUser } from './redux/actions/auth';
 
 function App() {
+  useEffect(() => {
+    store.dispatch(getUser());
+  }, []);
+
   return (
     <Provider store={store}>
       <BrowserRouter>
         <div className="app">
           <Nav />
           <div className="wrapper">
-            <Switch>
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/add_employee" component={AddEmployee} />
-            </Switch>
+            <Router />
           </div>
         </div>
       </BrowserRouter>

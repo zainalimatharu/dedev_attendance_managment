@@ -1,4 +1,9 @@
-import { LOGIN_SUCCESS, SET_USER, CLEAR_USER_REDUCER } from './types';
+import {
+  LOGIN_SUCCESS,
+  SET_USER,
+  CLEAR_USER_REDUCER,
+  AUTH_ERROR,
+} from './types';
 import axios from 'axios';
 
 // importing utilities
@@ -14,13 +19,13 @@ const getUser = () => async (dispatch) => {
 
     dispatch({ type: SET_USER, payload: res.data });
   } catch (error) {
-    console.log(error);
-    console.log(error.status);
+    dispatch({ type: AUTH_ERROR });
+    console.log(error.response);
   }
 };
 
 const login = (data) => async (dispatch) => {
-  dispatch({type: CLEAR_USER_REDUCER})
+  dispatch({ type: CLEAR_USER_REDUCER });
 
   const { email, password } = data;
 

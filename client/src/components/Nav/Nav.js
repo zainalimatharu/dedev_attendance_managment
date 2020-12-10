@@ -10,7 +10,7 @@ const Nav = () => {
           <b className="nav-block">DeDev</b>
         </Link>
       </p>
-      <Link to="/add_employee">
+      <Link to="/addEmployee">
         <p className="h-5 nav-block">
           Employees
           <hr />
