@@ -7,5 +7,6 @@ const { login } = require('../controllers/auth.controllers');
 
 // 1-> route to sign into the app and get token
 authRouter.post('/login', login);
+authRouter.post('/logout');
 
 module.exports = authRouter;

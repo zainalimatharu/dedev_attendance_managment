@@ -6,14 +6,14 @@ const durationRouter = express.Router();
 const {
   setArrival,
   setDeparture,
-} = require('../controllers/duration.controllers');
+} = require('../controllers/attendance.controllers');
 
 // importing required middlewares
 const auth = require('../middlewares/auth');
 
 // 1-> set arrival time of a user (either be an employee or ad admin)
 // 2-> set departure time of a user (either be an employee or ad admin)
-durationRouter.post('/set_arrival/:userId', auth, setArrival);
-durationRouter.patch('/set_departure/:userId', auth, setDeparture);
+durationRouter.post('/arrival/:userId', auth, setArrival);
+durationRouter.patch('/departure/:userId', auth, setDeparture);
 
 module.exports = durationRouter;

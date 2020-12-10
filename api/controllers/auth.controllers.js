@@ -13,16 +13,15 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     let user = await User.findOne({ email });
-
     if (!user) {
       return res
-        .status(404)
+        .status(400)
         .json({ message: 'Invalid Email & Password combination' });
     }
 
     const isMatched = await bcrypt.compare(password, user.password);
     if (!isMatched) {
-      return res.status(404).json({
+      return res.status(400).json({
         message: 'Invalid Email & Password combination',
       });
     }

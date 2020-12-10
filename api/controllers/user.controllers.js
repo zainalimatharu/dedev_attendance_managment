@@ -8,6 +8,17 @@ const jwtSecret = require('../config/default.json').jwtSecret;
 // importing required models
 const User = require('../models/user.model');
 
+// get a user
+const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
+};
+
 // create an employee
 const addEmployee = async (req, res, next) => {
   try {
@@ -47,4 +58,5 @@ const addEmployee = async (req, res, next) => {
 
 module.exports = {
   addEmployee,
+  getUser,
 };

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const moment = require('moment');
 
-const durationSchema = Schema({
+const attendanceSchema = Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: 'user',
@@ -12,4 +12,4 @@ const durationSchema = Schema({
   departureTime: { type: Date },
 });
 
-module.exports = Duration = mongoose.model('workduration', durationSchema);
+module.exports = Attendance = mongoose.model('workduration', attendanceSchema);

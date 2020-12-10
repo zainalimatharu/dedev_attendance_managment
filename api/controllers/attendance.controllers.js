@@ -2,7 +2,7 @@
 const moment = require('moment');
 
 // importing required models
-const Duration = require('../models/duration.model');
+const Attendance = require('../models/attendance.model');
 
 // importing helper functions
 const { calculateToday } = require('../helpers/calculateDuration');
@@ -20,7 +20,7 @@ const setArrival = async (req, res, next) => {
       // if user has already set his arrival time,
       // he won't be able to set his arrival time again.
       // instead, will be given a response of 409; conflict
-      let arrived = await Duration.find({
+      let arrived = await Attendance.find({
         user: userId,
         arrivalTime: {
           $lte: moment().utc(true).valueOf(),
@@ -33,7 +33,7 @@ const setArrival = async (req, res, next) => {
 
       // if user has not already set his arrival time
       // set his arrival time by creating a document ni database
-      let duration = new Duration({
+      let duration = new Attendance({
         user: userId,
         arrivalTime: moment().utc(true),
       });
@@ -61,7 +61,7 @@ const setDeparture = async (req, res, next) => {
     // Otherwise, a "Not authorized" message will be sent
     // Even admin can't set an employee's departure time
     if (req.user.id === userId) {
-      const result = await Duration.findOneAndUpdate(
+      const result = await Attendance.findOneAndUpdate(
         {
           user: userId,
           arrivalTime: {
