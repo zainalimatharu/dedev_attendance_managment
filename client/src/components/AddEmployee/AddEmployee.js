@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { addUser } from '../../redux/actions/user';
 // import './style.css';
 
-const AddEmployee = () => {
+const AddEmployee = ({ addUser, history }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
+    admin: false,
   });
   const [errors, setErrors] = useState({
     name: '',
@@ -55,7 +59,7 @@ const AddEmployee = () => {
         password: errorObj.password ? errorObj.password : '',
       });
     } else {
-      console.log(formData);
+      addUser(formData, history);
     }
   };
 
@@ -164,4 +168,4 @@ const AddEmployee = () => {
   );
 };
 
-export default AddEmployee;
+export default connect(null, { addUser })(withRouter(AddEmployee));

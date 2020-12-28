@@ -8,10 +8,9 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { connect } from 'react-redux';
 import { getToday, getMyTimeSheet } from '../../redux/actions/report';
 import { setArrival, setDeparture } from '../../redux/actions/attendance';
-import { Profile } from '../Profile/Profile';
 import moment from 'moment';
 
-const EmployeeDashboard = ({
+const Dashboard = ({
   report: { myTimeSheet, today, presentToday, loading },
   auth: { user },
   getToday,
@@ -26,9 +25,6 @@ const EmployeeDashboard = ({
       key: 'selection',
     },
   ]);
-
-  const [arrivalTime, setArrivalTime] = useState(moment().format('hh:mm'));
-  const [departureTime, setDepartureTime] = useState(moment().format('hh:mm'));
 
   const [collapsible, toggleCollapsible] = useState(false);
 
@@ -71,7 +67,7 @@ const EmployeeDashboard = ({
               {user.bio ? user.bio : <span>No bio.</span>}
             </div>
             <div className="skills">
-              <p onClick={() => console.log(user.skills.length)}>Skills:</p>
+              <p onClick={() => console.log(user.skills.length)}>Skills</p>
               <div className="skills-list">
                 {user.skills.length > 0 ? (
                   user.skills.map((skill, idx) => (
@@ -178,7 +174,7 @@ const EmployeeDashboard = ({
                     id="arrivalTime"
                     // label="Select Time"
                     type="time"
-                    defaultValue={moment().format('hh:mm')}
+                    defaultValue={moment().format('hh:mm a')}
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -273,4 +269,4 @@ export default connect(mapStateToProps, {
   getMyTimeSheet,
   setArrival,
   setDeparture,
-})(EmployeeDashboard);
+})(Dashboard);

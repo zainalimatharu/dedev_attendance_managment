@@ -9,18 +9,20 @@ import { setAlert } from './alerts';
 
 // importing utilities
 import setAuthToken from '../../utilities/setAuthToken';
+import removeAuthToken from '../../utilities/removeAuthToken';
 
 // get a single user => logged in user
 const getUser = () => async (dispatch) => {
   try {
     if (localStorage.getItem('dd_token')) {
       setAuthToken(localStorage.getItem('dd_token'));
+
+      const res = await axios.get(`http://localhost:8088/users/getUser`);
+
+      dispatch({ type: SET_USER, payload: res.data });
+    } else {
+      dispatch({ type: AUTH_ERROR });
     }
-
-    const res = await axios.get(`http://localhost:8088/users/getUser`);
-
-    dispatch({ type: SET_USER, payload: res.data });
-    console.log(res);
   } catch (error) {
     dispatch({ type: AUTH_ERROR });
     console.log(error.response);
@@ -73,13 +75,29 @@ const updateUser = (data, userId, history) => async (dispatch) => {
 };
 
 // add new user
-const addUser = (data) => async (dispatch) => {
+const addUser = (data, history) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = JSON.stringify(data);
+
   try {
-    console.log(data);
+    let res = await axios.post(
+      'http://localhost:8088/users/addEmployee',
+      body,
+      config
+    );
+
+    dispatch(setAlert(`New employee created`, 'success'));
+
+    history.push('/employees');
   } catch (error) {
     console.log(error);
-    console.log(error.response);
+    dispatch(setAlert(error.response.data.message, 'warning'));
   }
 };
 
-export { getUser, getUsers, updateUser };
+export { getUser, getUsers, updateUser, addUser };

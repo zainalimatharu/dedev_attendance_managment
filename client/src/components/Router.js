@@ -41,7 +41,19 @@ const Router = ({ auth: { user, isAuthenticated, systemRole, loading } }) => {
         }
       />
       {/* addEmployee route */}
-      <Route exact path="/addEmployee" render={() => <AddEmployee />} />
+      <Route
+        exact
+        path="/addEmployee"
+        render={() =>
+          loading ? (
+            <Loading loading={loading} />
+          ) : isAuthenticated && systemRole === 'admin' ? (
+            <AddEmployee />
+          ) : (
+            <Redirect to="/login" />
+          )
+        }
+      />
       {/* dashboard route */}
       <Route
         exact

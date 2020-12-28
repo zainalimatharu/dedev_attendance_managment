@@ -54,13 +54,22 @@ const login = (data) => async (dispatch) => {
   }
 };
 
-const logout = () => (dispatch) => {
+const logout = () => async (dispatch) => {
   console.log('logging out: ', axios.defaults.headers.common['authorization']);
 
   removeAuthToken();
   dispatch({ type: CLEAR_USER });
 
   console.log('logged out: ', axios.defaults.headers.common['authorization']);
+
+  try {
+    const res = await axios.post(`http://localhost:8088/auth/logout`);
+
+    console.log(res.data);
+  } catch (error) {
+    console.log(error);
+    console.log(error.response.status);
+  }
 };
 
 export { login, logout };
