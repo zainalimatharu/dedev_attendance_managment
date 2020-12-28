@@ -2,12 +2,8 @@ import React, { useState } from 'react';
 import './style.css';
 import { connect } from 'react-redux';
 import { login } from '../../redux/actions/auth';
-import { Redirect } from 'react-router-dom';
 
-const AddEmployee = ({
-  auth: { isAuthenticated, loading, systemRole },
-  login,
-}) => {
+const Login = ({ auth: { loading }, login }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -93,30 +89,23 @@ const AddEmployee = ({
     setErrors({ ...errors, [e.target.name]: '' });
   };
 
-  // if (!loading && isAuthenticated) {
-  //   return systemRole === 'admin' ? (
-  //     <Redirect to="/dashboard" />
-  //   ) : (
-  //     systemRole === 'employee' && <Redirect to="/dashboard" />
-  //   );
-  // }
-
   return loading ? (
     'loading...'
   ) : (
     <div className="login">
-      <div className="container">
-        <div className="login-heading">
-          <div className="wrapper">
-            <div className="inner-wrapper">
-              <h1
-                className="h-2-a"
-                style={{ textAlign: 'center', marginBottom: '55px' }}
-              >
-                Log In
-              </h1>
-              <p style={{ textAlign: 'center' }}>Login and explore!</p>
-            </div>
+      <div className="login-wrapper">
+        <div className="login-heading-md">
+          <div className="login-inner-wraper">
+            <h1 className="h-2-a" style={{ margin: '20px 0 50px 0' }}>
+              Login
+            </h1>
+            <p>Login & Explore!</p>
+          </div>
+        </div>
+        <div className="login-heading-xs">
+          <div className="login-inner-wraper">
+            <h1 className="h-2-a">Login</h1>
+            <p>Login & Explore!</p>
           </div>
         </div>
         <div className="login-form">
@@ -159,4 +148,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { login })(AddEmployee);
+export default connect(mapStateToProps, { login })(Login);

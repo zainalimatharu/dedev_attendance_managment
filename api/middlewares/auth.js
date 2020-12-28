@@ -3,7 +3,7 @@ const jwtSecret = require('../config/default.json').jwtSecret;
 
 module.exports = function (req, res, next) {
   // get token from header
-  const token = req.header('x-auth-token');
+  const token = req.headers.authorization;
 
   // check if not token
   if (!token) {

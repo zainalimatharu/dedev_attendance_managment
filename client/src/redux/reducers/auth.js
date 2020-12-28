@@ -1,8 +1,8 @@
 import {
   LOGIN_SUCCESS,
   SET_USER,
+  CLEAR_USER,
   CLEAR_USER_REDUCER,
-  SET_LOADING,
   AUTH_ERROR,
 } from '../actions/types';
 
@@ -45,9 +45,19 @@ export default function (state = initialState, action) {
       localStorage.removeItem('dd_token');
       return {
         user: null,
-        token: localStorage.getItem('dd_token'),
+        token: null,
+        systemRole: null,
         isAuthenticated: false,
         loading: true,
+      };
+    case CLEAR_USER:
+      localStorage.removeItem('dd_token');
+      return {
+        user: null,
+        token: null,
+        systemRole: null,
+        isAuthenticated: false,
+        loading: false,
       };
     default:
       return state;

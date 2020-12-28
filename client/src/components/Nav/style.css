@@ -4,9 +4,8 @@
   color: #ffffff;
   padding: 0px 5vw;
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto auto auto;
   align-items: center;
-  grid-column-gap: 1vw;
 }
 .nav hr {
   margin: 4px 0px;
@@ -14,6 +13,9 @@
 .nav a {
   color: #ffffff;
   text-decoration: none;
+}
+.nav .nav-elms {
+  margin-left: 1vw;
 }
 .nav .logo hr {
   margin: 0px 0px;

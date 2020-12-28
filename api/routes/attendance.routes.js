@@ -14,6 +14,6 @@ const auth = require('../middlewares/auth');
 // 1-> set arrival time of a user (either be an employee or ad admin)
 // 2-> set departure time of a user (either be an employee or ad admin)
 durationRouter.post('/arrival/:userId', auth, setArrival);
-durationRouter.patch('/departure/:userId', auth, setDeparture);
+durationRouter.post('/departure/:userId', auth, setDeparture);
 
 module.exports = durationRouter;

@@ -1,4 +1,11 @@
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const SET_USER = 'SET_USER';
+export const CLEAR_USER = 'CLEAR_USER';
 export const CLEAR_USER_REDUCER = 'CLEAR_USER_REDUCER';
+export const SET_USERS = 'SET_USERS';
 export const AUTH_ERROR = 'AUTH_ERROR';
+export const SET_MYDAY = 'SET_MYDAY';
+export const SET_MYTIMESHEET = 'SET_MYTIMESHEET';
+export const SET_LOADING = 'SET_LOADING';
+export const SET_ALERT = 'SET_ALERT';
+export const REMOVE_ALERT = 'REMOVE_ALERT';

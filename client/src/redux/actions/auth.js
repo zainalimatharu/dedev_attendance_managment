@@ -1,28 +1,20 @@
-import {
-  LOGIN_SUCCESS,
-  SET_USER,
-  CLEAR_USER_REDUCER,
-  AUTH_ERROR,
-} from './types';
+// importing required modules & packages
 import axios from 'axios';
 
+// importing action types
+import {
+  LOGIN_SUCCESS,
+  CLEAR_USER,
+  AUTH_ERROR,
+  CLEAR_USER_REDUCER,
+} from './types';
+
 // importing utilities
-import setAuthToken from '../../utilities/setAuthToken';
+import removeAuthToken from '../../utilities/removeAuthToken';
 
-const getUser = () => async (dispatch) => {
-  try {
-    if (localStorage.getItem('dd_token')) {
-      setAuthToken(localStorage.getItem('dd_token'));
-    }
-
-    const res = await axios.get(`http://localhost:8088/user/get_user`);
-
-    dispatch({ type: SET_USER, payload: res.data });
-  } catch (error) {
-    dispatch({ type: AUTH_ERROR });
-    console.log(error.response);
-  }
-};
+// import required actions from sibling action files
+import { setAlert } from './alerts';
+import { getUser } from './user';
 
 const login = (data) => async (dispatch) => {
   dispatch({ type: CLEAR_USER_REDUCER });
@@ -50,9 +42,25 @@ const login = (data) => async (dispatch) => {
 
     dispatch(getUser());
   } catch (error) {
+    dispatch({ type: AUTH_ERROR });
+    const err = error.response.data.message;
+
+    if (err) {
+      dispatch(setAlert(err, 'error'));
+    }
+
     console.log(error);
-    console.log(error.response);
+    console.log(err, error.response.status);
   }
 };
 
-export { login, getUser };
+const logout = () => (dispatch) => {
+  console.log('logging out: ', axios.defaults.headers.common['authorization']);
+
+  removeAuthToken();
+  dispatch({ type: CLEAR_USER });
+
+  console.log('logged out: ', axios.defaults.headers.common['authorization']);
+};
+
+export { login, logout };

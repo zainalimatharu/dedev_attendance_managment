@@ -100,22 +100,20 @@ const AddEmployee = () => {
   };
 
   return (
-    <div className="login">
-      <div className="container">
-        <div className="login-heading">
-          <div className="wrapper">
-            <div className="inner-wrapper">
-              <h1
-                className="h-2-a"
-                style={{ textAlign: 'center', marginBottom: '30px' }}
-              >
-                Add an Employee
-              </h1>
-              <p style={{ textAlign: 'center' }}>
-                Provide employee's details &<br />
-                Register an employee!
-              </p>
-            </div>
+    <div class="login">
+      <div className="login-wrapper">
+        <div className="login-heading-md">
+          <div className="login-inner-wraper">
+            <h1 className="h-2-a" style={{ margin: '20px 0 80px 0' }}>
+              Add Employee
+            </h1>
+            <p>Add a new employee to your company!</p>
+          </div>
+        </div>
+        <div className="login-heading-xs">
+          <div className="login-inner-wraper">
+            <h1 className="h-4">Add Employee</h1>
+            <p>Add a new employee to your company!</p>
           </div>
         </div>
         <div className="login-form">

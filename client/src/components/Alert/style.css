@@ -1,0 +1,21 @@
+.alert {
+  /* width: 100px;
+  height: 40px; */
+  left: 50px;
+  bottom: 50px;
+  padding: 10px 20px;
+  color: white;
+  position: fixed;
+}
+.error {
+  background-color: crimson;
+}
+.success {
+  background-color: forestgreen;
+}
+.info {
+  background-color: royalblue;
+}
+.warning {
+  background-color: saddlebrown;
+}

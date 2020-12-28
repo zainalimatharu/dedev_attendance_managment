@@ -5,72 +5,87 @@ import Login from './Login/Login';
 import AddEmployee from './AddEmployee/AddEmployee';
 import Loading from '../components/Loading/Loading';
 import AdminDashboard from './AdminDashboard/AdminDashboard';
-import EmployeeDashboard from './EmployeeDashboard/EmployeeDashboard';
+import Dashboard from './Dashboard/Dashboard';
+import EditProfile from './EditProfile/EditProfile';
+import Employees from './Employees/Employees';
 
-const Router = ({ auth: { isAuthenticated, systemRole, loading } }) => {
+const Router = ({ auth: { user, isAuthenticated, systemRole, loading } }) => {
   return (
     <Switch>
-      {/* <Route exact path="/login" component={Login} /> */}
+      {/* home route */}
       <Route
         exact
-        path="/login"
-        render={
-          () =>
-            loading ? (
-              <Loading loading={loading} />
-            ) : isAuthenticated ? (
-              <Redirect to="/dashboard" />
-            ) : (
-              <Login />
-            )
-          // !loading && isAuthenticated ? <Redirect to="/dashboard" /> : <Login />
-        }
-      />
-      <Route exact path="/addEmployee" component={AddEmployee} />
-      {/* <Route exact path="/adminDashboard" component={AdminDashboard} /> */}
-      <Route
-        exact
-        path="/dashboard"
-        render={
-          () =>
-            loading ? (
-              <Loading loading={loading} />
-            ) : isAuthenticated && systemRole === 'admin' ? (
-              <AdminDashboard />
-            ) : isAuthenticated && systemRole === 'employee' ? (
-              <EmployeeDashboard />
-            ) : (
-              <Redirect to="/login" />
-            )
-          // !loading && isAuthenticated ? (
-          //   systemRole === 'admin' ? (
-          //     <AdminDashboard />
-          //   ) : (
-          //     systemRole === 'employee' && <EmployeeDashboard />
-          //   )
-          // ) : (
-          //   <Redirect to="/login" />
-          // )
-        }
-        // render={() => {
-        //   store.getState().auth.isAuthenticated ? (
-        //     <AdminDashboard />
-        //   ) : (
-        //     <Redirect to={{ pathname: '/login' }} />
-        //   );
-        // }}
-      />
-      {/* <Route
-        exact
-        path="/employeeDashboard"
+        path="/"
         render={() =>
-          !loading && isAuthenticated && systemRole === 'employee' ? (
-            <EmployeeDashboard />
+          loading ? (
+            <Loading loading={loading} />
+          ) : isAuthenticated ? (
+            <Redirect to="/dashboard" />
           ) : (
             <Redirect to="/login" />
           )
         }
-      /> */}
+      />
+      {/* login route */}
+      <Route
+        exact
+        path="/login"
+        render={() =>
+          loading ? (
+            <Loading loading={loading} />
+          ) : isAuthenticated ? (
+            <Redirect to="/dashboard" />
+          ) : (
+            <Login />
+          )
+        }
+      />
+      {/* addEmployee route */}
+      <Route exact path="/addEmployee" render={() => <AddEmployee />} />
+      {/* dashboard route */}
+      <Route
+        exact
+        path="/dashboard"
+        render={() =>
+          loading ? (
+            <Loading loading={loading} />
+          ) : isAuthenticated && systemRole === 'admin' ? (
+            <Dashboard />
+          ) : isAuthenticated && systemRole === 'employee' ? (
+            <Dashboard />
+          ) : (
+            <Redirect to="/login" />
+          )
+        }
+      />
+      {/* editProfile route */}
+      <Route
+        exact
+        path="/editProfile/:userId"
+        render={() =>
+          loading ? (
+            <Loading loading={loading} />
+          ) : isAuthenticated ? (
+            <EditProfile />
+          ) : (
+            <Redirect to="/login" />
+          )
+        }
+      />
+      {/* employees route */}
+      <Route
+        exact
+        path="/employees"
+        render={() =>
+          loading ? (
+            <Loading loading={loading} />
+          ) : isAuthenticated ? (
+            <Employees />
+          ) : (
+            <Redirect to="/login" />
+          )
+        }
+      />
     </Switch>
   );
 };

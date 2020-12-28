@@ -11,6 +11,7 @@ const { calculateToday } = require('../helpers/calculateDuration');
 const setArrival = async (req, res, next) => {
   try {
     const { userId } = req.params;
+    const { arrivalTime } = req.body;
 
     // if the person setting arrival time is logged in
     //  => he will be able to ste his arrival time.
@@ -23,19 +24,27 @@ const setArrival = async (req, res, next) => {
       let arrived = await Attendance.find({
         user: userId,
         arrivalTime: {
-          $lte: moment().utc(true).valueOf(),
-          $gte: moment(calculateToday()).utc(true).valueOf(),
+          // $lte: moment().utc(true).valueOf(),
+          $lte: moment().endOf('day').utc(true),
+          // $gte: moment(calculateToday()).utc(true).valueOf(),
+          $gte: moment().startOf('day').utc(true),
         },
       });
 
+      // res.json({
+      //   arrived,
+      //   startOfDay: moment().startOf('day').utc(true),
+      //   endOfDay: moment().endOf('day').utc(true),
+      // });
+
       if (arrived.length > 0)
-        return res.statua(409).json({ message: 'Arrival Time already set' });
+        return res.status(409).json({ message: 'Arrival Time already set' });
 
       // if user has not already set his arrival time
       // set his arrival time by creating a document ni database
       let duration = new Attendance({
         user: userId,
-        arrivalTime: moment().utc(true),
+        arrivalTime,
       });
 
       duratioan = await duration.save();
@@ -55,6 +64,7 @@ const setArrival = async (req, res, next) => {
 const setDeparture = async (req, res, next) => {
   try {
     const { userId } = req.params;
+    const { departureTime } = req.body;
 
     // if the person setting departure time is logged in
     //  => he will be able to ste his departure time.
@@ -65,11 +75,11 @@ const setDeparture = async (req, res, next) => {
         {
           user: userId,
           arrivalTime: {
-            $lte: moment().utc(true).valueOf(),
-            $gte: moment(calculateToday()).utc(true).valueOf(),
+            $lte: moment().endOf('day').utc(true),
+            $gte: moment().startOf('day').utc(true),
           },
         },
-        { departureTime: moment().utc(true) },
+        { departureTime: departureTime },
         { new: true }
       );
 

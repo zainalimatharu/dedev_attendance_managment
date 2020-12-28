@@ -12,4 +12,9 @@ const attendanceSchema = Schema({
   departureTime: { type: Date },
 });
 
+// attendanceSchema.pre('aggregate', (next, doc) => {
+  
+//   next();
+// });
+
 module.exports = Attendance = mongoose.model('workduration', attendanceSchema);

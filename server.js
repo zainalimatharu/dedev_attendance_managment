@@ -44,10 +44,10 @@ app.use((req, res, next) => {
 });
 
 // declare routes
-app.use('/user', userRoutes);
+app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/attendance', attendanceRoutes);
-app.use('/report', reportRoutes);
+app.use('/reports', reportRoutes);
 
 // set post
 app.set('port', process.env.PORT || 8088);

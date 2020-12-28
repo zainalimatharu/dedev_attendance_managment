@@ -16,11 +16,20 @@ h6 {
 .h-1 {
   font-size: 2.92rem;
 }
+.h-1-a {
+  font-size: 2.52rem;
+  font-family: -apple-system, BlinkMacSystemFont, San Francisco, Helvetica Neue,
+    Helvetica, Ubuntu, Roboto, Noto, Segoe UI, Arial, sans-serif;
+}
 .h-2-a {
   font-size: 2.22rem;
 }
 .h-2 {
   font-size: 1.92rem;
+}
+.h-3-a {
+  font-size: 1.55rem;
+  font-weight: 500;
 }
 .h-3 {
   font-size: 1.5rem;
@@ -31,6 +40,12 @@ h6 {
 .h-5 {
   font-size: 1.1rem;
   font-weight: 500;
+}
+.h-6 {
+  font-size: 1.1rem;
+}
+.h-6-a {
+  font-size: 1rem;
 }
 *:focus {
   outline: none;

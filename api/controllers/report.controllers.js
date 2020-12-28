@@ -1,5 +1,6 @@
 // importing required packages and modules
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 // importing required models
 const Attendance = require('../models/attendance.model');
@@ -17,6 +18,7 @@ const myTimeSheet = async (req, res, next) => {
   try {
     const { userId } = req.params;
     const { lte, gte, message } = req.body;
+
     // if user himself or admin is logged in => then return thr results
     // => else return status of 500 "Not Authorized"
     if (req.user.id === userId || req.user.admin === true) {
@@ -47,14 +49,37 @@ const myTimeSheet = async (req, res, next) => {
                       // if: [{ $type: '$departureTime' }, 'missing'],
                       if: { $ne: [{ $type: '$departureTime' }, 'missing'] },
                       then: '$departureTime',
-                      else: '$$NOW',
+                      else: {
+                        $toDate: {
+                          $concat: [
+                            {
+                              $dateToString: {
+                                format: '%Y-%m-%d',
+                                date: '$arrivalTime',
+                              },
+                            },
+                            'T18:00:00.000+00:00',
+                          ],
+                        },
+                      },
                     },
                   },
                   '$arrivalTime',
                 ],
               },
             },
-            daysAppeared: { $addToSet: '$arrivalTime' },
+            daysAppeared: {
+              $addToSet: {
+                arrivalTime: '$arrivalTime',
+                departureTime: {
+                  $cond: {
+                    if: { $ne: [{ $type: '$departureTime' }, 'missing'] },
+                    then: '$departureTime',
+                    else: null,
+                  },
+                },
+              },
+            },
           },
         },
         // stage 3 -> find relative object in "users" collection
@@ -98,7 +123,7 @@ const myTimeSheet = async (req, res, next) => {
         return res.status(200).json({ message });
       }
 
-      res.status(200).json(results);
+      res.status(200).json(results[0]);
     } else {
       res.status(500).json({ message: 'Not Authorized' });
     }
@@ -107,6 +132,12 @@ const myTimeSheet = async (req, res, next) => {
     res.status(500).json({ error });
   }
 };
+
+// const myTimeSheet = async (req, res, next) => {
+//   try {
+//     res.json({ message: 'success' });
+//   } catch (error) {}
+// };
 
 const timeSheet = async (req, res, next) => {
   try {
@@ -127,8 +158,8 @@ const timeSheet = async (req, res, next) => {
             $in: objectUserIds,
           },
           arrivalTime: {
-            $lte: new Date(lte),
-            $gte: new Date(gte),
+            $lte: lte,
+            $gte: gte,
           },
         },
       },
@@ -144,7 +175,7 @@ const timeSheet = async (req, res, next) => {
                   $cond: {
                     if: { $ne: [{ $type: '$departureTime' }, 'missing'] },
                     then: '$departureTime',
-                    else: '$$NOW',
+                    else: new Date(),
                   },
                 },
                 '$arrivalTime',
