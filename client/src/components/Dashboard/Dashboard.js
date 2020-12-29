@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
-import { Avatar, Paper, TextField } from '@material-ui/core';
+import { Avatar, TextField } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
@@ -29,6 +29,7 @@ const Dashboard = ({
   const [collapsible, toggleCollapsible] = useState(false);
 
   useEffect(() => {
+    document.title = 'Dashboard | DeDev Technologies';
     getToday({
       userId: user._id,
       gte: moment().startOf('day').utc(true)._d,
@@ -174,7 +175,7 @@ const Dashboard = ({
                     id="arrivalTime"
                     // label="Select Time"
                     type="time"
-                    defaultValue={moment().format('hh:mm a')}
+                    defaultValue={moment().format('hh:mm')}
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -239,7 +240,7 @@ const Dashboard = ({
                     {myTimeSheet.daysAppeared.map((day) => (
                       <li>
                         {/* {format(new Date(day), 'MM/dd/yyyy')} */}
-                        {moment(day.arrivalTime).format('MM-DD-YYYY')}
+                        {moment(day.arrivalTime).format('dddd, MMM DD YYYY')}
                       </li>
                     ))}
                   </ol>

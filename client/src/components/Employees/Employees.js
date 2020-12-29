@@ -33,6 +33,7 @@ const Employees = ({ loggedInUser, user: { users, loading }, getUsers }) => {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
+    document.title = 'Employees | DeDev Technologies';
     getUsers();
 
     console.log(users);

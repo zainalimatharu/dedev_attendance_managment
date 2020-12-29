@@ -16,6 +16,10 @@ const userSchema = Schema({
   salary: { type: Number },
   skills: { type: [String] },
   image: { type: String },
+  social: {
+    github: { type: String },
+    linkedIn: { type: String },
+  },
 });
 
 module.exports = User = mongoose.model('user', userSchema);

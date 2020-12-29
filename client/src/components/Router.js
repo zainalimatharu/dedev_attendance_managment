@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Login from './Login/Login';
 import AddEmployee from './AddEmployee/AddEmployee';
 import Loading from '../components/Loading/Loading';
-import AdminDashboard from './AdminDashboard/AdminDashboard';
 import Dashboard from './Dashboard/Dashboard';
 import EditProfile from './EditProfile/EditProfile';
 import Employees from './Employees/Employees';

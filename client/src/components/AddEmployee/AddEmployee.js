@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { addUser } from '../../redux/actions/user';
@@ -16,6 +16,10 @@ const AddEmployee = ({ addUser, history }) => {
     email: '',
     password: '',
   });
+
+  useEffect(() => {
+    document.title = 'Add Employee | DeDev Technologies';
+  }, []);
 
   // on change handler
   const onChange = (e) =>

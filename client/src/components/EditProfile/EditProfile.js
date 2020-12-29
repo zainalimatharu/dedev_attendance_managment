@@ -1,4 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Tags from '@yaireo/tagify/dist/react.tagify'; // React-wrapper file
+import '@yaireo/tagify/dist/tagify.css';
+import { PaperProfile } from '../Profile/Profile';
+import { connect } from 'react-redux';
+import { updateUser } from '../../redux/actions/user';
+import { withRouter } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import SaveIcon from '@material-ui/icons/Save';
 import {
   Box,
   Grid,
@@ -7,14 +15,13 @@ import {
   Paper,
   TextField,
   Button,
+  Chip,
 } from '@material-ui/core';
-import SaveIcon from '@material-ui/icons/Save';
-import { makeStyles } from '@material-ui/core/styles';
-import { PaperProfile } from '../Profile/Profile';
-import { connect } from 'react-redux';
-import { updateUser } from '../../redux/actions/user';
-import { withRouter } from 'react-router-dom';
 
+// importing utilities
+import { validateOnBlur, validateOnSubmit } from '../../utilities/validation';
+
+// apply custom styles to material-ui components
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -44,10 +51,32 @@ const useStyles = makeStyles((theme) => ({
     display: 'grid',
     justifyItems: 'end',
   },
+  social: {
+    '&:hover': {
+      textDecoration: 'underline',
+      cursor: 'pointer',
+    },
+  },
+  skills: {
+    display: 'flex',
+    // justifyContent: 'center',
+    flexWrap: 'wrap',
+    listStyle: 'none',
+    padding: theme.spacing(0.5),
+    margin: 0,
+  },
+  chip: {
+    margin: theme.spacing(0.5),
+  },
 }));
 
+// React Arrow Function Component
 const EditProfile = ({ auth: { user, loading }, updateUser, history }) => {
+  // initialize classes
   const classes = useStyles();
+
+  const [socialVisibility, setSocialVisibility] = useState(false);
+  const [skills, setSkills] = useState([]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -56,6 +85,8 @@ const EditProfile = ({ auth: { user, loading }, updateUser, history }) => {
     bio: '',
     skills: '',
     salary: '',
+    linkedIn: '',
+    github: '',
   });
 
   const [errors, setErrors] = useState({
@@ -65,52 +96,39 @@ const EditProfile = ({ auth: { user, loading }, updateUser, history }) => {
     bio: '',
     skills: '',
     salary: '',
-    admin: null,
+    linkedIn: '',
+    github: '',
   });
 
   useEffect(() => {
+    document.title = 'Edit Profile | DeDev Technologies';
     setFormData({
       name: loading || !user.name ? '' : user.name.split('_').join(' '),
       email: loading || !user.email ? '' : user.email,
       password: loading || !user.password ? '' : '',
       bio: loading || !user.bio ? '' : user.bio,
-      skills: loading || !user.skills ? '' : user.skills.join(', '),
       salary: loading || !user.salary ? '' : user.salary,
+      linkedIn:
+        loading || !user.social || !user.social.linkedIn
+          ? ''
+          : user.social.linkedIn,
+      github:
+        loading || !user.social || !user.social.github
+          ? ''
+          : user.social.github,
       admin: loading || !user.admin ? false : user.admin,
     });
+
+    setSkills(loading || !user.skills ? [] : user.skills);
   }, [user]);
 
+  // on change handler
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   // on submit handler
   const onSubmit = async (e) => {
-    const errorObj = {};
-    const twoParts = formData.email.split('@');
-    const fourParts = twoParts[1] ? twoParts[1].split('.') : ['', ''];
-    const eachPart = fourParts[1] ? fourParts : ['', ''];
-
-    for (let [key, value] of Object.entries(formData)) {
-      if (value.length === 0) {
-        errorObj[key] = `${key.charAt(0).toUpperCase()}${key.slice(
-          1
-        )} is required`;
-        console.log(1);
-      } else if (key === 'name' && value.length < 2) {
-        errorObj[key] = `Name must be at least 2 characters`;
-        console.log(2);
-      } else if (key === 'password' && value.length < 6) {
-        errorObj[key] = `Password must be at least 6 characters`;
-        console.log(3);
-      } else if (
-        (key === 'email' && !value.includes('@')) ||
-        eachPart[0].length < 2 ||
-        eachPart[1].length < 2
-      ) {
-        errorObj.email = 'Invalid email';
-        console.log(4);
-      }
-    }
+    const errorObj = validateOnSubmit(formData);
 
     if (errorObj.email || errorObj.password || errorObj.name) {
       setErrors({
@@ -120,50 +138,34 @@ const EditProfile = ({ auth: { user, loading }, updateUser, history }) => {
         password: errorObj.password ? errorObj.password : '',
       });
     } else {
+      // if everything ok ? invoke the action
+      formData.skills = skills;
       updateUser(formData, user._id, history);
     }
   };
 
   // on blur handler
   const onBlur = (e) => {
-    const twoParts = formData.email.split('@');
-    const fourParts = twoParts[1] ? twoParts[1].split('.') : ['', ''];
-    const eachPart = fourParts[1] ? fourParts : ['', ''];
-
-    if (e.target.value.length === 0) {
-      setErrors({
-        ...errors,
-        [e.target.name]: `${e.target.name
-          .charAt(0)
-          .toUpperCase()}${e.target.name.slice(1)} is required`,
-      });
-      console.log(5);
-    } else if (e.target.name === 'name' && e.target.value.length < 2) {
-      setErrors({
-        ...errors,
-        name: `Name must be at least 2 characters`,
-      });
-      console.log(6);
-    } else if (e.target.name === 'password' && e.target.value.length < 6) {
-      setErrors({
-        ...errors,
-        password: `Password must be at least 6 characters`,
-      });
-      console.log(7);
-    } else if (
-      (e.target.name === 'email' && !e.target.value.includes('@')) ||
-      eachPart[0].length < 2 ||
-      eachPart[1].length < 2
-    ) {
-      setErrors({ ...errors, email: `Invalid email` });
-      console.log(8);
-    }
+    validateOnBlur(e.target.name, formData, errors, setErrors);
   };
 
   // on focus handler
   const onFocus = (e) => {
     setErrors({ ...errors, [e.target.name]: '' });
   };
+
+  const handleSkillDelete = (skillToDelete) => () => {
+    // let newSkills = skills.filter((skill) => skill !== skillToDelete);
+    setSkills((skills) => skills.filter((skill) => skill !== skillToDelete));
+  };
+
+  const onSkillSubmit = (e) => {
+    e.preventDefault();
+    const value = document.getElementById('skillChip').value.trim();
+    setSkills([...skills, value]);
+    e.target.reset();
+  };
+
   return (
     <Box>
       {/* spacing={2} means 8 * 2 = 16px */}
@@ -171,19 +173,7 @@ const EditProfile = ({ auth: { user, loading }, updateUser, history }) => {
         {!loading && user.name && (
           <PaperProfile
             name={user.name}
-            bio={
-              user.bio ? (
-                user.bio
-              ) : (
-                <Button
-                  variant="outlined"
-                  // color="primary"
-                  size="medium"
-                >
-                  add bio
-                </Button>
-              )
-            }
+            bio={user.bio ? user.bio : 'No bio'}
             skills={user.skills}
           />
         )}
@@ -264,18 +254,73 @@ const EditProfile = ({ auth: { user, loading }, updateUser, history }) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  className={classes.input}
-                  error={errors.skills ? true : false}
-                  label="Skills"
-                  type="text"
-                  value={formData.skills}
-                  helperText={errors.skills && errors.skills}
-                  variant="filled"
-                  name="skills"
-                  onChange={(e) => onChange(e)}
-                />
+                <form onSubmit={(e) => onSkillSubmit(e)}>
+                  <TextField
+                    className={classes.input}
+                    // error={errors.skills ? true : false}
+                    id="skillChip"
+                    label="Skills"
+                    type="text"
+                    placeholder="add a skill and press Enter"
+                    // helperText={errors.skills && errors.skills}
+                    variant="filled"
+                    name="ChipSkills"
+                  />
+                </form>
               </Grid>
+              <Grid item xs={12}>
+                <Paper component="ul" elevation={0} className={classes.skills}>
+                  {skills.map((skill, idx) => (
+                    <li key={idx}>
+                      <Chip
+                        label={skill}
+                        onDelete={handleSkillDelete(skill)}
+                        className={classes.chip}
+                      />
+                    </li>
+                  ))}
+                </Paper>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography
+                  variant="button"
+                  display="block"
+                  className={classes.social}
+                  onClick={() => setSocialVisibility(!socialVisibility)}
+                >
+                  Add social accounts
+                </Typography>
+              </Grid>
+              {socialVisibility && (
+                <Grid item spacing={2} container>
+                  <Grid item xs={12}>
+                    <TextField
+                      className={classes.input}
+                      error={errors.linkedIn ? true : false}
+                      label="LinkedIn"
+                      value={formData.linkedIn}
+                      placeholder="e.g. https://www.linkedin.com/in/username"
+                      helperText={errors.linkedIn && errors.linkedIn}
+                      variant="filled"
+                      name="linkedIn"
+                      onChange={(e) => onChange(e)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      className={classes.input}
+                      error={errors.github ? true : false}
+                      label="Github"
+                      value={formData.github}
+                      placeholder="e.g. https://github.com/username"
+                      helperText={errors.github && errors.github}
+                      variant="filled"
+                      name="github"
+                      onChange={(e) => onChange(e)}
+                    />
+                  </Grid>
+                </Grid>
+              )}
               <Grid item xs={12} className={classes.btn}>
                 <Button
                   variant="outlined"

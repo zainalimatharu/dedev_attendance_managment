@@ -11,7 +11,8 @@ const User = require('../models/user.model');
 // get a user
 const getUser = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    const user = await User.findById(req.user.id).select('-password -__v');
+    console.log(user.social);
     res.status(200).json(user);
   } catch (error) {
     console.log(error);
@@ -105,6 +106,8 @@ const updateUser = async (req, res, next) => {
       skills,
       salary,
       image,
+      linkedIn,
+      github,
     } = req.body;
 
     const salt = await bcrypt.genSalt(10);
@@ -116,10 +119,14 @@ const updateUser = async (req, res, next) => {
     userFields.password = encryptedPassword;
     userFields.admin = admin;
     if (bio) userFields.bio = bio;
-    if (skills)
-      userFields.skills = skills.split(',').map((skill) => skill.trim());
+    if (skills) userFields.skills = skills;
     if (salary) userFields.salary = salary;
     if (image) userFields.image = image;
+
+    // build social object
+    userFields.social = {};
+    if (linkedIn) userFields.social.linkedIn = linkedIn;
+    if (github) userFields.social.github = github;
 
     let updatedUser = await User.findOneAndUpdate(
       { _id: userId },
