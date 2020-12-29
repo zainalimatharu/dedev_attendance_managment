@@ -133,9 +133,8 @@ const Dashboard = ({
                     </p>
                     <TextField
                       id="departureTime"
-                      // label="Select Time"
                       type="time"
-                      defaultValue={moment().format('hh:mm')}
+                      defaultValue={moment().format('HH:mm')}
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -173,9 +172,8 @@ const Dashboard = ({
                   </p>
                   <TextField
                     id="arrivalTime"
-                    // label="Select Time"
                     type="time"
-                    defaultValue={moment().format('hh:mm')}
+                    defaultValue={moment().format('HH:mm')}
                     InputLabelProps={{
                       shrink: true,
                     }}

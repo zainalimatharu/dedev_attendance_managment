@@ -31,20 +31,17 @@ const setArrival = async (req, res, next) => {
         },
       });
 
-      // res.json({
-      //   arrived,
-      //   startOfDay: moment().startOf('day').utc(true),
-      //   endOfDay: moment().endOf('day').utc(true),
-      // });
-
       if (arrived.length > 0)
         return res.status(409).json({ message: 'Arrival Time already set' });
 
       // if user has not already set his arrival time
-      // set his arrival time by creating a document ni database
+      // set his arrival time by creating a document in the database
       let duration = new Attendance({
         user: userId,
         arrivalTime,
+        leave: false,
+        absent: false,
+        status: 'pending',
       });
 
       duratioan = await duration.save();

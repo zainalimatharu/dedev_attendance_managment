@@ -9,7 +9,6 @@ import { setAlert } from './alerts';
 
 // importing utilities
 import setAuthToken from '../../utilities/setAuthToken';
-import removeAuthToken from '../../utilities/removeAuthToken';
 
 // get a single user => logged in user
 const getUser = () => async (dispatch) => {
@@ -34,13 +33,15 @@ const getUsers = () => async (dispatch) => {
   try {
     const res = await axios.get(`http://localhost:8088/users/getUsers`);
 
-    console.log(res.data);
-
     dispatch({ type: SET_USERS, payload: res.data.users });
   } catch (error) {
     console.log(error);
     console.log(error.response);
   }
+};
+
+const setUsers = (payload) => (dispatch) => {
+  dispatch({ type: SET_USERS, payload });
 };
 
 const updateUser = (data, userId, history) => async (dispatch) => {
@@ -69,6 +70,8 @@ const updateUser = (data, userId, history) => async (dispatch) => {
 
     history.push('/dashboard');
   } catch (error) {
+    dispatch(setAlert(`Error occurred`, 'danger'));
+
     console.log(error);
     console.log(error.response);
   }
@@ -100,4 +103,4 @@ const addUser = (data, history) => async (dispatch) => {
   }
 };
 
-export { getUser, getUsers, updateUser, addUser };
+export { getUser, getUsers, setUsers, updateUser, addUser };

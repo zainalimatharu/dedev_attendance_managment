@@ -162,7 +162,7 @@ const EditProfile = ({ auth: { user, loading }, updateUser, history }) => {
   const onSkillSubmit = (e) => {
     e.preventDefault();
     const value = document.getElementById('skillChip').value.trim();
-    setSkills([...skills, value]);
+    value.length > 0 && setSkills([...skills, value]);
     e.target.reset();
   };
 

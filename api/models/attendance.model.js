@@ -10,10 +10,13 @@ const attendanceSchema = Schema({
   },
   arrivalTime: { type: Date, required: true },
   departureTime: { type: Date },
+  leave: { type: Boolean },
+  absent: { type: Boolean },
+  status: { type: String }, // pending, verfied, denied
 });
 
 // attendanceSchema.pre('aggregate', (next, doc) => {
-  
+
 //   next();
 // });
 
