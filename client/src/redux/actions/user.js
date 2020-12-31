@@ -2,7 +2,16 @@
 import axios from 'axios';
 
 // importing action types
-import { SET_USER, SET_USERS, AUTH_ERROR } from './types';
+import {
+  SET_USER,
+  SET_USERS,
+  AUTH_ERROR,
+  SET_USERBYID,
+  SETUSER_LOADING,
+} from './types';
+
+// importing URL
+import { URL } from './keys';
 
 // import required actions from sibling action files
 import { setAlert } from './alerts';
@@ -16,14 +25,27 @@ const getUser = () => async (dispatch) => {
     if (localStorage.getItem('dd_token')) {
       setAuthToken(localStorage.getItem('dd_token'));
 
-      const res = await axios.get(`http://localhost:8088/users/getUser`);
+      const res = await axios.get(`${URL}/users/getUser`);
 
       dispatch({ type: SET_USER, payload: res.data });
     } else {
-      dispatch({ type: AUTH_ERROR });
+      dispatch({ type: AUTH_ERROR, payload: { loading: false } });
     }
   } catch (error) {
-    dispatch({ type: AUTH_ERROR });
+    dispatch({ type: AUTH_ERROR, payload: { loading: false } });
+    console.log(error.response);
+  }
+};
+
+// get a single user => By id
+const getUserById = (userId) => async (dispatch) => {
+  dispatch({ type: SETUSER_LOADING, payload: true });
+  try {
+    const res = await axios.get(`${URL}/users/getUser/${userId}`);
+
+    dispatch({ type: SET_USERBYID, payload: res.data });
+  } catch (error) {
+    console.log(error);
     console.log(error.response);
   }
 };
@@ -31,7 +53,7 @@ const getUser = () => async (dispatch) => {
 // get all employees of organization
 const getUsers = () => async (dispatch) => {
   try {
-    const res = await axios.get(`http://localhost:8088/users/getUsers`);
+    const res = await axios.get(`${URL}/users/getUsers`);
 
     dispatch({ type: SET_USERS, payload: res.data.users });
   } catch (error) {
@@ -57,14 +79,14 @@ const updateUser = (data, userId, history) => async (dispatch) => {
 
   try {
     const res = await axios.post(
-      `http://localhost:8088/users/updateUser/${userId}`,
+      `${URL}/users/updateUser/${userId}`,
       body,
       config
     );
 
-    if (res.status === 200 && res.data.message === 'user updated') {
-      dispatch({ type: SET_USER, payload: res.data.user });
-    }
+    // if (res.status === 200 && res.data.message === 'user updated') {
+    //   dispatch({ type: SET_USER, payload: res.data.user });
+    // }
 
     dispatch(setAlert(`${res.data.user.name} updated`, 'success'));
 
@@ -88,19 +110,27 @@ const addUser = (data, history) => async (dispatch) => {
   const body = JSON.stringify(data);
 
   try {
-    let res = await axios.post(
-      'http://localhost:8088/users/addEmployee',
-      body,
-      config
-    );
+    let res = await axios.post(`${URL}/users/addEmployee`, body, config);
 
     dispatch(setAlert(`New employee created`, 'success'));
 
     history.push('/employees');
   } catch (error) {
-    console.log(error);
+    console.log(error.response);
     dispatch(setAlert(error.response.data.message, 'warning'));
   }
 };
 
-export { getUser, getUsers, setUsers, updateUser, addUser };
+const setLoading = (payload) => (dispatch) => {
+  dispatch({ type: SETUSER_LOADING, payload });
+};
+
+export {
+  getUser,
+  getUserById,
+  getUsers,
+  setUsers,
+  updateUser,
+  addUser,
+  setLoading,
+};

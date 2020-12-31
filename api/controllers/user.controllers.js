@@ -12,7 +12,21 @@ const User = require('../models/user.model');
 const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id).select('-password -__v');
-    console.log(user.social);
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
+};
+
+// get a user by Id
+const getUserById = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.userId).select(
+      '-password -__v'
+    );
+
     res.status(200).json(user);
   } catch (error) {
     console.log(error);
@@ -144,6 +158,7 @@ const updateUser = async (req, res, next) => {
 module.exports = {
   addEmployee,
   getUser,
+  getUserById,
   updateUser,
   getUsers,
 };

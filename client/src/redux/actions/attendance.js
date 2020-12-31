@@ -1,7 +1,14 @@
+// importing required modules & packages
 import axios from 'axios';
 import moment from 'moment';
+
+// importing URL
+import { URL } from './keys';
+
+// import required actions from sibling action files
 import { getToday } from './report';
 
+// set arrival time of user
 const setArrival = (arrivalTime, userId) => async (dispatch) => {
   const config = {
     headers: {
@@ -13,7 +20,7 @@ const setArrival = (arrivalTime, userId) => async (dispatch) => {
 
   try {
     const res = await axios.post(
-      `http://localhost:8088/attendance/arrival/${userId}`,
+      `${URL}/attendance/arrival/${userId}`,
       body,
       config
     );
@@ -31,6 +38,7 @@ const setArrival = (arrivalTime, userId) => async (dispatch) => {
   }
 };
 
+// set departure time of user
 const setDeparture = (departureTime, userId) => async (dispatch) => {
   const config = {
     headers: {
@@ -42,7 +50,7 @@ const setDeparture = (departureTime, userId) => async (dispatch) => {
 
   try {
     const res = await axios.post(
-      `http://localhost:8088/attendance/departure/${userId}`,
+      `${URL}/attendance/departure/${userId}`,
       body,
       config
     );

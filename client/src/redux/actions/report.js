@@ -1,6 +1,9 @@
 // importing required modules & packages
 import axios from 'axios';
 
+// importing URL
+import { URL } from './keys';
+
 // importing action types
 import { SET_MYTIMESHEET, SET_MYDAY, SET_LOADING } from './types';
 
@@ -22,7 +25,7 @@ const getToday = (data) => async (dispatch) => {
       },
     };
 
-    const url = `http://localhost:8088/reports/myTimeSheet/${userId}`;
+    const url = `${URL}/reports/myTimeSheet/${userId}`;
 
     const res = await axios.post(url, body, config);
     console.log('my time sheet:', res.data, res.status);
@@ -60,7 +63,7 @@ const getMyTimeSheet = (data) => async (dispatch) => {
       },
     };
 
-    const url = `http://localhost:8088/reports/myTimeSheet/${userId}`;
+    const url = `${URL}/reports/myTimeSheet/${userId}`;
 
     const res = await axios.post(url, body, config);
     console.log('my time sheet:', res.data, res.status);

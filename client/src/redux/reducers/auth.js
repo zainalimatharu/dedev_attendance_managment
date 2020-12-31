@@ -32,32 +32,15 @@ export default function (state = initialState, action) {
         systemRole: payload.admin ? 'admin' : 'employee',
         loading: false,
       };
-    case AUTH_ERROR:
-      localStorage.removeItem('dd-token');
-      return {
-        ...state,
-        user: null,
-        token: null,
-        isAuthenticated: false,
-        loading: false,
-      };
-    case CLEAR_USER_REDUCER:
-      localStorage.removeItem('dd_token');
-      return {
-        user: null,
-        token: null,
-        systemRole: null,
-        isAuthenticated: false,
-        loading: true,
-      };
     case CLEAR_USER:
+    case AUTH_ERROR:
       localStorage.removeItem('dd_token');
       return {
         user: null,
         token: null,
         systemRole: null,
         isAuthenticated: false,
-        loading: false,
+        loading: payload.loading,
       };
     default:
       return state;

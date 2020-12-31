@@ -1,7 +1,8 @@
-import { SET_USERS } from '../actions/types';
+import { SET_USERS, SET_USERBYID, SETUSER_LOADING } from '../actions/types';
 
 const initialState = {
   users: [],
+  user: {},
   loading: true,
 };
 
@@ -13,6 +14,17 @@ export default function (state = initialState, action) {
         ...state,
         users: payload,
         loading: false,
+      };
+    case SET_USERBYID:
+      return {
+        ...state,
+        user: payload,
+        loading: false,
+      };
+    case SETUSER_LOADING:
+      return {
+        ...state,
+        loading: payload,
       };
     default:
       return state;

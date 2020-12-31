@@ -1,15 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './style.css';
-import {
-  Box,
-  Grid,
-  Typography,
-  Avatar,
-  Button,
-  Paper,
-} from '@material-ui/core';
+import { Box, Grid, Typography, Avatar, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import ProfilePhoto from '../Dashboard/ProfilePhoto.jpg';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -59,22 +51,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PaperProfile = ({ name, bio, skills, showEditBtn, userId }) => {
-  const classes = useStyles();
-
-  return (
-    <Paper className={classes.profile}>
-      <Profile
-        name={name}
-        bio={bio}
-        skills={skills}
-        showEditBtn={showEditBtn}
-        userid={userId}
-      />
-    </Paper>
-  );
-};
-
 const Profile = ({ name, bio, skills, showEditBtn, userId }) => {
   const classes = useStyles();
 
@@ -110,4 +86,4 @@ const Profile = ({ name, bio, skills, showEditBtn, userId }) => {
   );
 };
 
-export { PaperProfile, Profile };
+export default Profile;

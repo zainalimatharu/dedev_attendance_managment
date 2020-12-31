@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
-import { Avatar, TextField } from '@material-ui/core';
+import { Avatar, TextField, Tooltip } from '@material-ui/core';
+import { Error, CheckCircle } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
@@ -96,10 +97,28 @@ const Dashboard = ({
             {presentToday ? (
               <p className="h-4">
                 You arrived at{' '}
-                {/* {(format(new Date(today.daysAppeared[0])), 'HH:mm')} */}
                 {moment(today.daysAppeared[0].arrivalTime)
                   .utc()
-                  .format('hh:mm a')}
+                  .format('hh:mm a')}{' '}
+                {today.daysAppeared[0].status === 'pending' ? (
+                  <Tooltip
+                    title="Not verfied yet"
+                    placement="top"
+                    arrow
+                    // TransitionProps={{ timeout: 600 }}
+                  >
+                    <Error />
+                  </Tooltip>
+                ) : today.daysAppeared[0].status === 'verfied' ? (
+                  <Tooltip
+                    title="Verfied"
+                    placement="top"
+                    arrow
+                    // TransitionProps={{ timeout: 600 }}
+                  >
+                    <CheckCircle />
+                  </Tooltip>
+                ) : null}
                 <br />
                 {today.daysAppeared[0].departureTime ? (
                   <p className="h-4">

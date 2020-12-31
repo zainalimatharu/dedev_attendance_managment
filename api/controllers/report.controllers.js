@@ -71,6 +71,7 @@ const myTimeSheet = async (req, res, next) => {
             daysAppeared: {
               $addToSet: {
                 arrivalTime: '$arrivalTime',
+                status: '$status',
                 departureTime: {
                   $cond: {
                     if: { $ne: [{ $type: '$departureTime' }, 'missing'] },

@@ -1,95 +1,11 @@
 import React, { Component, useEffect, useState } from 'react';
 import { Container, Grid, TextField } from '@material-ui/core';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { PaperProfile } from '../Profile/Profile';
+import { withStyles } from '@material-ui/core/styles';
+import PaperProfile from '../Profile/PaperProfile';
 import Loading from '../Loading/Loading';
 import { connect } from 'react-redux';
 import { getUsers, setUsers } from '../../redux/actions/user';
 import clsx from 'clsx';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: '40px 0',
-  },
-  input: {
-    width: '100%',
-    marginBottom: '20px',
-  },
-  paper: {
-    padding: '20px 30px',
-  },
-  container: {
-    padding: '70px 0',
-  },
-  search: {
-    width: '100%',
-  },
-  card: {
-    width: '100%',
-  },
-  wrapper: {
-    padding: '20px 15px',
-  },
-}));
-
-const Employees = ({
-  loggedInUser,
-  user: { users, loading },
-  getUsers,
-  setUsers,
-}) => {
-  const classes = useStyles();
-
-  useEffect(() => {
-    document.title = 'Employees | DeDev Technologies';
-    getUsers();
-  }, [getUsers]);
-
-  const onChange = (queryText) => {
-    let employees = users.filter((user) => user.name.includes(queryText));
-    console.log(queryText, employees);
-    setUsers(employees);
-  };
-
-  return loading ? (
-    <Loading />
-  ) : (
-    <Container maxWidth="md" className={classes.root}>
-      <Grid container className={classes.input}>
-        <Grid item xs={12}>
-          <TextField
-            className={classes.input}
-            label="Search Employees"
-            // placeholder="e.g. creates beautiful Reactjs UIs"
-            variant="filled"
-            name="serach"
-            onChange={(e) => onChange(e.target.value)}
-          />
-        </Grid>
-      </Grid>
-      {users.map((user, idx) => (
-        <PaperProfile
-          key={idx}
-          name={user.name}
-          bio={user.bio}
-          skills={user.skills}
-          userId={user._id}
-          showEditBtn={
-            user.admin || user._id === loggedInUser._id ? true : false
-          }
-        />
-      ))}
-    </Container>
-  );
-};
-
-// const mapStateToProps = (state) => ({
-//   user: state.user,
-//   loggedInUser: state.auth.user,
-// });
-
-// export default connect(mapStateToProps, { getUsers, setUsers })(Employees);
 
 const styles = {
   root: {
@@ -130,6 +46,8 @@ class Users extends Component {
   componentDidMount() {
     document.title = 'Employees | DeDev Technologies';
     this.props.getUsers();
+
+    console.log(this.props.loggedInUser.admin);
   }
 
   componentDidUpdate(prevProps) {
@@ -187,7 +105,9 @@ class Users extends Component {
                 skills={user.skills}
                 userId={user._id}
                 showEditBtn={
-                  user.admin || user._id === loggedInUser._id ? true : false
+                  loggedInUser.admin || user._id === loggedInUser._id
+                    ? true
+                    : false
                 }
               />
             ))

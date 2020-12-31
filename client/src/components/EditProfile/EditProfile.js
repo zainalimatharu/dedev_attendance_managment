@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Tags from '@yaireo/tagify/dist/react.tagify'; // React-wrapper file
-import '@yaireo/tagify/dist/tagify.css';
-import { PaperProfile } from '../Profile/Profile';
+import PaperProfile from '../Profile/PaperProfile';
+import Loading from '../Loading/Loading';
 import { connect } from 'react-redux';
-import { updateUser } from '../../redux/actions/user';
+import { updateUser, getUserById } from '../../redux/actions/user';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
@@ -71,7 +70,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // React Arrow Function Component
-const EditProfile = ({ auth: { user, loading }, updateUser, history }) => {
+const EditProfile = ({
+  // auth: { user, loading },
+  employee: { user, loading },
+  updateUser,
+  getUserById,
+  history,
+  match,
+}) => {
   // initialize classes
   const classes = useStyles();
 
@@ -102,6 +108,13 @@ const EditProfile = ({ auth: { user, loading }, updateUser, history }) => {
 
   useEffect(() => {
     document.title = 'Edit Profile | DeDev Technologies';
+  }, []);
+
+  useEffect(() => {
+    getUserById(match.params.userId);
+  }, [getUserById]);
+
+  useEffect(() => {
     setFormData({
       name: loading || !user.name ? '' : user.name.split('_').join(' '),
       email: loading || !user.email ? '' : user.email,
@@ -178,7 +191,7 @@ const EditProfile = ({ auth: { user, loading }, updateUser, history }) => {
           />
         )}
 
-        <Grid container xs={12}>
+        <Grid container>
           <Paper className={classes.paper}>
             <Typography className={classes.h_3} paragraph>
               Edit Profile
@@ -343,8 +356,9 @@ const EditProfile = ({ auth: { user, loading }, updateUser, history }) => {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  employee: state.user,
 });
 
-export default connect(mapStateToProps, { updateUser })(
+export default connect(mapStateToProps, { updateUser, getUserById })(
   withRouter(EditProfile)
 );
