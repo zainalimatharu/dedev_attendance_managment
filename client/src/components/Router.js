@@ -7,6 +7,7 @@ import Loading from '../components/Loading/Loading';
 import Dashboard from './Dashboard/Dashboard';
 import EditProfile from './EditProfile/EditProfile';
 import Employees from './Employees/Employees';
+import Reports from './Reports/Reports';
 
 const Router = ({ auth: { user, isAuthenticated, systemRole, loading } }) => {
   return (
@@ -92,6 +93,20 @@ const Router = ({ auth: { user, isAuthenticated, systemRole, loading } }) => {
             <Loading loading={loading} />
           ) : isAuthenticated ? (
             <Employees />
+          ) : (
+            <Redirect to="/login" />
+          )
+        }
+      />
+      {/* reports route */}
+      <Route
+        exact
+        path="/reports"
+        render={() =>
+          loading ? (
+            <Loading loading={loading} />
+          ) : isAuthenticated && systemRole === 'admin' ? (
+            <Reports />
           ) : (
             <Redirect to="/login" />
           )

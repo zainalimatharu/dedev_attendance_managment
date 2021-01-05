@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // importing action types
-import { LOGIN_SUCCESS, CLEAR_USER, AUTH_ERROR } from './types';
+import { LOGIN_SUCCESS, CLEAR_USER, AUTH_ERROR, LOGOUT } from './types';
 
 // importing URL
 import { URL } from './keys';
@@ -52,7 +52,7 @@ const logout = () => async (dispatch) => {
   console.log('logging out: ', axios.defaults.headers.common['authorization']);
 
   removeAuthToken();
-  dispatch({ type: CLEAR_USER, payload: { loading: false } });
+  dispatch({ type: LOGOUT, payload: { loading: false } });
 
   console.log('logged out: ', axios.defaults.headers.common['authorization']);
 

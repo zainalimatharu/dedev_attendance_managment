@@ -1,1 +1,1 @@
-export const URL = 'https://dedevtech.herokuapp.com';
+export const URL = 'http://localhost:8088';

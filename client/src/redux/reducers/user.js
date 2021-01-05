@@ -1,4 +1,9 @@
-import { SET_USERS, SET_USERBYID, SETUSER_LOADING } from '../actions/types';
+import {
+  SET_USERS,
+  SET_USERBYID,
+  SETUSER_LOADING,
+  LOGOUT,
+} from '../actions/types';
 
 const initialState = {
   users: [],
@@ -25,6 +30,13 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: payload,
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        users: [],
+        user: {},
+        loading: true,
       };
     default:
       return state;

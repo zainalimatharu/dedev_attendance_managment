@@ -13,6 +13,14 @@ const Nav = ({ auth: { loading, isAuthenticated, user }, logout }) => {
         </Link>
       </p>
       {!loading && isAuthenticated && user.admin && (
+        <Link to="/reports" className="nav-elms">
+          <p className="h-5 nav-block">
+            Reports
+            <hr />
+          </p>
+        </Link>
+      )}
+      {!loading && isAuthenticated && user.admin && (
         <Link to="/addEmployee" className="nav-elms">
           <p className="h-5 nav-block">
             Add Employee

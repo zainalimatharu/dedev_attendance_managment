@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 import Nav from './components/Nav/Nav';
+import NewNav from './components/NewNav/NewNav';
 import Router from './components/Router';
 import Alerts from './components/Alert/Alert';
 
@@ -18,7 +19,7 @@ function App() {
     <Provider store={store}>
       <BrowserRouter>
         <div className="app">
-          <Nav />
+          <NewNav />
           <div className="wrapper">
             <Alerts />
             <Router />

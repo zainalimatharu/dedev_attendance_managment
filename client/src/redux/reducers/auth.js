@@ -2,8 +2,8 @@ import {
   LOGIN_SUCCESS,
   SET_USER,
   CLEAR_USER,
-  CLEAR_USER_REDUCER,
   AUTH_ERROR,
+  LOGOUT,
 } from '../actions/types';
 
 const initialState = {
@@ -33,6 +33,7 @@ export default function (state = initialState, action) {
         loading: false,
       };
     case CLEAR_USER:
+    case LOGOUT:
     case AUTH_ERROR:
       localStorage.removeItem('dd_token');
       return {

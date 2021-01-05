@@ -4,7 +4,7 @@
   color: #ffffff;
   padding: 0px 5vw;
   display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  grid-template-columns: 1fr auto auto auto auto;
   align-items: center;
 }
 .nav hr {
