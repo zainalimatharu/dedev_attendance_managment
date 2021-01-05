@@ -4,6 +4,139 @@ const moment = require('moment');
 
 // importing required models
 const Attendance = require('../models/attendance.model');
+const User = require('../models/user.model');
+
+const todayReport = async (req, res, next) => {
+  try {
+    const gte = moment().startOf('day').utc('true')._d,
+      lte = moment().endOf('day').utc('true')._d;
+
+    // write mongodb aggregation pipeline query to fetch and calculate results
+    const results = await User.aggregate([
+      {
+        // stage 1 -> fetch workdurations of matching user _ids
+        // and within given time span
+        $lookup: {
+          from: 'workdurations',
+          let: {
+            userId: '$_id',
+            gte: new Date(gte),
+            lte: new Date(lte),
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$user', '$$userId'] },
+                    { $gte: ['$arrivalTime', '$$gte'] },
+                    { $lte: ['$arrivalTime', '$$lte'] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: 'today',
+        },
+      },
+      // stage 2 -> prune the not required fields
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          today: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json(results);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
+};
+
+const customizedReport = async (req, res, next) => {
+  try {
+    const { gte, lte } = req.body;
+
+    // write mongodb aggregation pipeline query to fetch and calculate results
+    const results = await User.aggregate([
+      {
+        // stage 1 -> fetch workdurations of matching user _ids
+        // and within given time span
+        $lookup: {
+          from: 'workdurations',
+          let: {
+            userId: '$_id',
+            gte: new Date(gte),
+            lte: new Date(lte),
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$user', '$$userId'] },
+                    { $gte: ['$date', '$$gte'] },
+                    { $lte: ['$date', '$$lte'] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: 'days',
+        },
+      },
+      // stage 2 -> prune the not required fields
+      {
+        $addFields: {
+          present: {
+            $filter: {
+              input: '$days',
+              as: 'day',
+              cond: {
+                $ne: [{ $type: '$$day.arrivalTime' }, 'missing'],
+              },
+            },
+          },
+          absent: {
+            $filter: {
+              input: '$days',
+              as: 'day',
+              cond: {
+                $eq: ['$$day.absent', true],
+              },
+            },
+          },
+          leave: {
+            $filter: {
+              input: '$days',
+              as: 'day',
+              cond: {
+                $eq: ['$$day.leave', true],
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          present: 1,
+          leave: 1,
+          absent: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json(results);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
+};
 
 // It calculates
 // 1 -> minutes a person with specified Id has worked,
@@ -234,7 +367,4 @@ const timeSheet = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  timeSheet,
-  myTimeSheet,
-};
+module.exports = { customizedReport, todayReport, timeSheet, myTimeSheet };
