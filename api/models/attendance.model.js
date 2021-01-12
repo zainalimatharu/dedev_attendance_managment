@@ -9,6 +9,7 @@ const attendanceSchema = Schema({
     required: true,
   },
   date: { type: Date, required: true },
+  eventId: { type: String, required: true },
   arrivalTime: { type: Date },
   departureTime: { type: Date },
   leave: { type: Boolean },

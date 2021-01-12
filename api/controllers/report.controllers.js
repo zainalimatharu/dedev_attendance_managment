@@ -6,6 +6,7 @@ const moment = require('moment');
 const Attendance = require('../models/attendance.model');
 const User = require('../models/user.model');
 
+// get today report of all users
 const todayReport = async (req, res, next) => {
   try {
     const gte = moment().startOf('day').utc('true')._d,
@@ -56,6 +57,7 @@ const todayReport = async (req, res, next) => {
   }
 };
 
+// get a report of all users within given time span
 const customizedReport = async (req, res, next) => {
   try {
     const { gte, lte } = req.body;
@@ -203,7 +205,9 @@ const myTimeSheet = async (req, res, next) => {
             },
             daysAppeared: {
               $addToSet: {
+                _id: '$_id',
                 arrivalTime: '$arrivalTime',
+                eventId: '$eventId',
                 status: '$status',
                 departureTime: {
                   $cond: {
@@ -267,12 +271,7 @@ const myTimeSheet = async (req, res, next) => {
   }
 };
 
-// const myTimeSheet = async (req, res, next) => {
-//   try {
-//     res.json({ message: 'success' });
-//   } catch (error) {}
-// };
-
+// => not in use curently
 const timeSheet = async (req, res, next) => {
   try {
     const { userIds, lte, gte, message } = req.body;

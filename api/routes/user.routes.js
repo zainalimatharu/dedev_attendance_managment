@@ -19,7 +19,7 @@ const isAdmin = require('../middlewares/isAdmin');
 // 2-> route to register an employee
 userRouter.post('/addEmployee', auth, isAdmin, addEmployee);
 userRouter.get('/getUser', auth, getUser);
-userRouter.get('/getUser/:userId', auth, isAdmin, getUserById);
+userRouter.get('/getUser/:userId', auth, getUserById);
 userRouter.get('/getUsers', auth, getUsers);
 userRouter.post('/updateUser/:userId', auth, updateUser);
 

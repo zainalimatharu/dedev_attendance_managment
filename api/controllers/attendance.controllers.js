@@ -1,35 +1,39 @@
 // importing required packages and modules
 const moment = require('moment');
 const accountSid = 'AC27ac2917fd92753c99567783cd97f653';
-const authToken = 'ee9f4ed53803c51cfa978f415775a07b';
+const authToken = '55db19cb1bc0673ee094539041fa4416';
 const twilioClient = require('twilio')(accountSid, authToken);
+const { google } = require('googleapis');
 
-// importing required models
+// specifying Calendar API scopes scopes
+const scopes = [
+  'https://www.googleapis.com/auth/calendar',
+  'https://www.googleapis.com/auth/calendar.events',
+];
+
+// importing google auth function & initialize it
+const googleAuth = require('../middlewares/googleAuth')(scopes);
+
+// initializing & authorizing calendar
+const calendar = google.calendar({ version: 'v3', auth: googleAuth });
+
+// importing required schema models
 const Attendance = require('../models/attendance.model');
-const User = require('../models/user.model');
 
 // set the arrival time of a user
 const setArrival = async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const { arrivalTime } = req.body;
+    const { arrivalTime, userName } = req.body;
 
     const date = moment(arrivalTime).utc().startOf('day')._d;
 
-    // if the person setting arrival time is logged in
-    //  => he will be able to ste his arrival time.
-    // Otherwise, a "Not authorized" message will be sent
-    // Even admin can't set an employee's arrival time
+    // check => if user has already set his arrival time
     if (req.user.id === userId) {
-      // if user has already set his arrival time,
-      // he won't be able to set his arrival time again.
-      // instead, will be given a response of 409; conflict
       let present = await Attendance.find({
         user: userId,
         date: {
-          // $lte: moment().utc(true).valueOf(),
           $lte: moment().endOf('day').utc(true),
-          // $gte: moment(calculateToday()).utc(true).valueOf(),
           $gte: moment().startOf('day').utc(true),
         },
       });
@@ -37,10 +41,34 @@ const setArrival = async (req, res, next) => {
       if (present.length > 0)
         return res.status(409).json({ message: 'Arrival Time already set' });
 
+      // prepare "msg"
+      const msg = `${userName} arrived at ${moment(arrivalTime)
+        .utc()
+        .format('hh:mm a')} on ${moment(date).utc().format('YYYY-MM-DD')}`;
+
+      // create event
+      const createdEvent = await calendar.events.insert({
+        calendarId: 'zainalimatharu@gmail.com',
+        resource: {
+          summary: msg,
+          location: 'Golden Plaza, G.T Road, Gujranwala',
+          description: 'This is the Arrival Time of a person',
+          start: {
+            dateTime: moment(arrivalTime).utc().subtract(5, 'hours'),
+            timeZone: 'Asia/Karachi',
+          },
+          end: {
+            dateTime: moment(arrivalTime).utc().add(4, 'hours'),
+            timeZone: 'Asia/Karachi',
+          },
+        },
+      });
+
       // if user has not already set his arrival time
       // set his arrival time by creating a document in the database
       let duration = new Attendance({
         user: userId,
+        eventId: createdEvent.data.id,
         arrivalTime,
         date,
         leave: false,
@@ -50,26 +78,25 @@ const setArrival = async (req, res, next) => {
 
       let attendance = await duration.save();
 
-      let user = await User.findById(userId).select('name email _id');
-
-      attendance.user = user;
-
+      // send a twilio message
       let sms = await twilioClient.messages.create({
-        body: `${user.name} arrived at ${moment(attendance.arrivalTime)
-          .utc()
-          .format('hh:mm a')} on ${moment(attendance.date)
-          .utc()
-          .format('YY-MM-DD')}`,
+        body: msg,
         from: '+13179327240',
         to: '+923127237979',
       });
 
       sms = sms.errorMessage === null ? 'sent' : 'could not send';
 
+      // return success response
       res.status(201).json({
         message: 'Arrival time set',
         duration: attendance,
         sms,
+        event: {
+          eventId: createdEvent.data.id,
+          status: createdEvent.data.status,
+          link: createdEvent.data.htmlLink,
+        },
       });
     } else {
       return res.status(401).json({ message: 'Not Authorized' });
@@ -80,15 +107,13 @@ const setArrival = async (req, res, next) => {
   }
 };
 
+// set departure time of user
 const setDeparture = async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const { departureTime } = req.body;
+    const { departureTime, eventId, userName } = req.body;
 
-    // if the person setting departure time is logged in
-    //  => he will be able to ste his departure time.
-    // Otherwise, a "Not authorized" message will be sent
-    // Even admin can't set an employee's departure time
+    // check => if user has set his arrival time first
     if (req.user.id === userId) {
       const result = await Attendance.findOneAndUpdate(
         {
@@ -102,30 +127,41 @@ const setDeparture = async (req, res, next) => {
         { new: true }
       );
 
-      // if the arrival time of a user has not been set yet
-      // send a response of status of 409
       if (result === null) {
         return res.status(409).json({ message: 'Arrival time not set' });
       }
 
-      let user = await User.findById(result.user).select('name email _id');
+      // prepare "msg"
+      const msg = `${userName} arrived at ${moment(result.arrivalTime)
+        .utc()
+        .format('hh:mm a')} and departed at ${moment(result.departureTime)
+        .utc()
+        .format('hh:mm a')} on ${moment(result.date)
+        .utc()
+        .format('YYYY-MM-DD')}`;
 
-      result.user = user;
+      // update event
+      const updatedEvent = await calendar.events.patch({
+        calendarId: 'zainalimatharu@gmail.com',
+        eventId: eventId,
+        resource: {
+          end: {
+            dateTime: moment(departureTime).utc().subtract(5, 'hours'),
+            timeZone: 'Asia/Karachi',
+          },
+        },
+      });
 
+      // send a twilio message
       let sms = await twilioClient.messages.create({
-        body: `${user.name} arrived at ${moment(result.arrivalTime)
-          .utc()
-          .format('hh:mm a')} and departed at ${moment(result.departureTime)
-          .utc()
-          .format('hh:mm a')} on ${moment(result.date)
-          .utc()
-          .format('YY-MM-DD')}`,
+        body: msg,
         from: '+13179327240',
         to: '+923127237979',
       });
 
       sms = sms.errorMessage === null ? 'sent' : 'could not send';
 
+      // return a success response
       res.status(200).json({
         message: 'Departure time set',
         data: {
@@ -135,6 +171,11 @@ const setDeparture = async (req, res, next) => {
           departureTime: result.departureTime,
         },
         sms,
+        event: {
+          eventId: updatedEvent.data.id,
+          status: updatedEvent.data.status,
+          link: updatedEvent.data.htmlLink,
+        },
       });
     } else {
       res.status(401).json({ message: 'Not Authorized' });

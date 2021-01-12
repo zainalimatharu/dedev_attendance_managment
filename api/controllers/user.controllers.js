@@ -23,11 +23,15 @@ const getUser = async (req, res, next) => {
 // get a user by Id
 const getUserById = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.userId).select(
-      '-password -__v'
-    );
+    if (req.user.id === req.params.userId || req.user.admin) {
+      const user = await User.findById(req.params.userId).select(
+        '-password -__v'
+      );
 
-    res.status(200).json(user);
+      res.status(200).json(user);
+    } else {
+      res.status(500).json({ message: 'Not Authorized' });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
@@ -130,8 +134,8 @@ const updateUser = async (req, res, next) => {
     let userFields = {};
     userFields.name = name;
     userFields.email = email;
-    userFields.password = encryptedPassword;
     userFields.admin = admin;
+    if (password) userFields.password = encryptedPassword;
     if (bio) userFields.bio = bio;
     if (skills) userFields.skills = skills;
     if (salary) userFields.salary = salary;

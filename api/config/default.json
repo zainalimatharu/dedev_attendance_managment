@@ -1,4 +1,6 @@
 {
     "mongoURI": "mongodb+srv://zain_ali:2015-Ag-55-rehan3@cluster0.weoa3.mongodb.net/<dbname>?retryWrites=true&w=majority",
-    "jwtSecret": "dedevdummyprojectkeepinmindthatitiscrucialprojectforyourassessmentinthecompany.iwillbuilditrightandwillsucceedinitInShaAllah"
+    "jwtSecret": "dedevdummyprojectkeepinmindthatitiscrucialprojectforyourassessmentinthecompany.iwillbuilditrightandwillsucceedinitInShaAllah",
+    "gmailClientId": "115167773540-lc3ubdcdgt4dlbklb0pr65ul3u0v4u18.apps.googleusercontent.com",
+    "gmailClientSecret": "cIUGb5AGdu-89Tpym5FExhdi"
 }
