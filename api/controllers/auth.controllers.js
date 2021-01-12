@@ -49,16 +49,6 @@ const login = async (req, res, next) => {
   }
 };
 
-const logout = async (req, res, next) => {
-  try {
-    res.json({ user: req.user });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error });
-  }
-};
-
 module.exports = {
   login,
-  logout,
 };
