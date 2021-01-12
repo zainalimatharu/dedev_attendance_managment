@@ -1,8 +1,6 @@
 // importing required modules and packages
 const express = require('express');
 const durationRouter = express.Router();
-const accountSid = 'AC27ac2917fd92753c99567783cd97f653';
-const authToken = 'ee9f4ed53803c51cfa978f415775a07b';
 
 // importing requied controllers
 const {

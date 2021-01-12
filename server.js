@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 // importing required packages & modules
 const http = require('http');
 const express = require('express');
@@ -50,7 +54,7 @@ app.use('/attendance', attendanceRoutes);
 app.use('/reports', reportRoutes);
 
 // set post
-app.set('port', process.env.PORT || 8088);
+app.set('port', process.env.PORT || 6000);
 
 // create server
 const server = http.createServer(app);

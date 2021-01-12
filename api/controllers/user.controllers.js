@@ -128,8 +128,10 @@ const updateUser = async (req, res, next) => {
       github,
     } = req.body;
 
-    const salt = await bcrypt.genSalt(10);
-    const encryptedPassword = await bcrypt.hash(password, salt);
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const encryptedPassword = await bcrypt.hash(password, salt);
+    }
 
     let userFields = {};
     userFields.name = name;

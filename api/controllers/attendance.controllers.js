@@ -1,9 +1,9 @@
 // importing required packages and modules
 const moment = require('moment');
-const accountSid = 'AC27ac2917fd92753c99567783cd97f653';
-const authToken = '55db19cb1bc0673ee094539041fa4416';
-const twilioClient = require('twilio')(accountSid, authToken);
 const { google } = require('googleapis');
+const accountSid = process.env.twilioAccountSid;
+const authToken = process.env.twilioAuthToken;
+const twilioClient = require('twilio')(accountSid, authToken);
 
 // specifying Calendar API scopes scopes
 const scopes = [
@@ -48,7 +48,7 @@ const setArrival = async (req, res, next) => {
 
       // create event
       const createdEvent = await calendar.events.insert({
-        calendarId: 'zainalimatharu@gmail.com',
+        calendarId: process.env.calendarId,
         resource: {
           summary: msg,
           location: 'Golden Plaza, G.T Road, Gujranwala',
@@ -81,8 +81,8 @@ const setArrival = async (req, res, next) => {
       // send a twilio message
       let sms = await twilioClient.messages.create({
         body: msg,
-        from: '+13179327240',
-        to: '+923127237979',
+        from: process.env.twilioFrom,
+        to: process.env.twilioTo,
       });
 
       sms = sms.errorMessage === null ? 'sent' : 'could not send';
