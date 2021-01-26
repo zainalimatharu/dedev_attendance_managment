@@ -1,9 +1,13 @@
 // importing required packages and modules
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const joi = require('joi');
 
-// importing jwt Secret
-const jwtSecret = require('../config/default.json').jwtSecret;
+// importing required Validation Error Messages
+const { INVALID_EMAIL, REQUIRED, MINMAX } = require('../validation/errorTexts');
+const {
+  updateUserSchema,
+  addEmployeeSchema,
+} = require('../validation/schemas');
 
 // importing required models
 const User = require('../models/user.model');
@@ -23,10 +27,14 @@ const getUser = async (req, res, next) => {
 // get a user by Id
 const getUserById = async (req, res, next) => {
   try {
-    if (req.user.id === req.params.userId || req.user.admin) {
+    const { userId } = req.params;
+
+    if (req.user.id === userId || req.user.admin) {
       const user = await User.findById(req.params.userId).select(
         '-password -__v'
       );
+
+      if (!user) return res.status(500).json({ message: 'User Not Found' });
 
       res.status(200).json(user);
     } else {
@@ -42,6 +50,10 @@ const getUserById = async (req, res, next) => {
 const getUsers = async (req, res, next) => {
   try {
     const users = await User.find({ admin: false }).select('-password -__v');
+
+    if (users.length < 1)
+      return res.status(500).json({ message: 'No Users Found' });
+
     res.status(200).json({ count: users.length, users });
   } catch (error) {
     console.log(error);
@@ -62,6 +74,26 @@ const addEmployee = async (req, res, next) => {
       skills,
       image,
     } = req.body;
+
+    // ---> Validation start <---
+    const error1 = addEmployeeSchema.validate(
+      { name, email, admin, password },
+      { abortEarly: false }
+    ).error;
+
+    const isValid1 = error1 == null;
+
+    if (!isValid1) {
+      let errors = error1.details.map((detail) => {
+        return {
+          key: detail.context.key,
+          value: detail.message,
+        };
+      });
+
+      return res.status(422).json(errors);
+    }
+    // ---> Validation end <---
 
     const user = await User.findOne({ email }).select('name email _id');
 
@@ -127,6 +159,26 @@ const updateUser = async (req, res, next) => {
       linkedIn,
       github,
     } = req.body;
+
+    // ---> Validation start <---
+    const error1 = updateUserSchema.validate(
+      { name, email, admin },
+      { abortEarly: false }
+    ).error;
+
+    const isValid1 = error1 == null;
+
+    if (!isValid1) {
+      let errors = error1.details.map((detail) => {
+        return {
+          key: detail.context.key,
+          value: detail.message,
+        };
+      });
+
+      return res.status(422).json(errors);
+    }
+    // ---> Validation end <---
 
     if (password) {
       const salt = await bcrypt.genSalt(10);

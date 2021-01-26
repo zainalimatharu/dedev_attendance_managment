@@ -5,24 +5,25 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   profile: {
-    marginBottom: theme.spacing(4),
-    padding: `15px 30px`,
+    '@media (max-width: 768px)': {
+      padding: '0',
+    },
+    '@media (min-width: 768px)': {
+      padding: '0 40px',
+    },
+    '@media (min-width: 992px)': {
+      padding: '0 90px',
+    },
   },
 }));
 
-const PaperProfile = ({ name, bio, skills, showEditBtn, userId }) => {
+const PaperProfile = ({ name, bio, skills, hasPad }) => {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.profile}>
-      <Profile
-        name={name}
-        bio={bio}
-        skills={skills}
-        showEditBtn={showEditBtn}
-        userId={userId}
-      />
-    </Paper>
+    <div className={classes.profile}>
+      <Profile name={name} bio={bio} skills={skills} />
+    </div>
   );
 };
 

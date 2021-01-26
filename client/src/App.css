@@ -1,7 +1,71 @@
+:root {
+  --header-height: 50px;
+  --sidebar-width: 195px;
+
+  --dedev: #0088cc;
+  --red: rgb(255, 212, 207);
+  --red: #f44336;
+  --deep-purple: #673ab7;
+  --blue: #03a9f4;
+  --cyan: #00bcd4;
+  --teal: #009688;
+  --green: #4caf50;
+  --light-green: #8bc34a;
+  --amber: #ffc107;
+  --orange: #ff9800;
+  --deep-orange: #ff5722;
+  --brown: #795548;
+  --blue-gray-1: #f2f6f8;
+  --blue-gray-2: #e4eaee;
+  --blue-gray-3: #c6d2d9;
+  --blue-gray-4: #90a4ae;
+  --blue-gray-5: #78909c;
+  --blue-gray-6: #607d8b;
+  --blue-gray-7: #546e7a;
+  --blue-gray-8: #455a64;
+  --blue-gray-9: #37474f;
+  --blue-gray-10: #263238;
+  --blue-gray-11: #1d272c;
+  --blue-gray-12: #12191d;
+  --yellow: #fbc02d;
+  --white: #fff;
+  --gray: #6c757d;
+  --gray-dark: #343a40;
+  --blue-gray: #607d8b;
+  --primary: #03a9f4;
+  --secondary: #4caf50;
+  --success: #4caf50;
+  --info: #03a9f4;
+  --warning: #ff9800;
+  --danger: #f44336;
+  --light: #e4eaee;
+  --lighter: #f2f6f8;
+  --dark: #333;
+  --purple: #9c27b0;
+  --indigo: #3f51b5;
+  --pink: #e91e63;
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-lg-custom: 1366px;
+  --font-family-sans-serif: 'Roboto', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+}
 body {
   margin: 0;
   padding: 0;
-  background-color: #dadde1;
+  background-color: var(--blue-gray-1);
+  font-family: var(--font-family-sans-serif);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #333;
+  text-align: left;
 }
 p,
 h1,
@@ -13,45 +77,90 @@ h6 {
   margin: 0;
   padding: 0;
 }
-.h-1 {
-  font-size: 2.92rem;
-}
-.h-1-a {
-  font-size: 2.52rem;
-  font-family: -apple-system, BlinkMacSystemFont, San Francisco, Helvetica Neue,
-    Helvetica, Ubuntu, Roboto, Noto, Segoe UI, Arial, sans-serif;
-}
-.h-2-a {
-  font-size: 2.22rem;
-}
-.h-2 {
-  font-size: 1.92rem;
-}
-.h-3-a {
-  font-size: 1.55rem;
-  font-weight: 500;
-}
-.h-3 {
-  font-size: 1.5rem;
-}
-.h-4 {
-  font-size: 1.3rem;
-}
-.h-5 {
-  font-size: 1.1rem;
-  font-weight: 500;
-}
 .h-6 {
-  font-size: 1.1rem;
-}
-.h-6-a {
-  font-size: 1rem;
+  font-size: 1.25rem;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.0075em;
 }
 *:focus {
   outline: none;
 }
-.wrapper {
-  height: calc(90vh - 65px);
+.app {
+  overflow-x: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+.header {
+  width: 100%;
+  height: var(--header-height);
+  position: fixed;
+  z-index: 1;
+  background-color: var(--white);
+  border-left: 0.2857rem solid var(--blue-gray-6);
+  border-bottom: 1px solid var(--blue-gray-3);
+}
+.layout {
+  width: 100%;
+  height: calc(100vh - var(--header-height));
+}
+.layout .left {
+  width: var(--sidebar-width);
+  height: 100vh;
+  top: var(--header-height);
+  bottom: auto;
+  position: fixed;
+  border-left: 0.2857rem solid var(--blue-gray-6);
+  border-right: 1px solid var(--blue-gray-3);
+  background-color: var(--white);
+}
+.layout .right {
+  margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
+  min-height: 100%;
+  margin-top: var(--header-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  transition: margin 0.3s ease;
+}
+.content-container-fluid {
+  width: 96.8%;
+  min-height: 100%;
+}
+
+/* small */
+@media only screen and (max-width: 768px) {
+  .h-6 {
+    font-size: 1.1rem;
+  }
+  .layout .left {
+    width: 0;
+    border-left: 0;
+  }
+  .layout .right {
+    margin-left: 0;
+  }
+  .content-container-fluid {
+    width: 100%;
+    margin-left: 34px;
+  }
+  .layout .right {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* medium */
+@media only screen and (min-width: 768px) {
+}
+
+/* Large */
+@media only screen and (min-width: 992px) {
+  .hide-on-large {
+  }
 }
 
 /* .App {

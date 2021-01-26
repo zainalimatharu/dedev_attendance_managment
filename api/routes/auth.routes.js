@@ -6,9 +6,12 @@ const authRouter = express.Router();
 const loginController = require('../controllers/auth.controllers').login;
 
 // importing required middlewares
-const auth = require('../middlewares/auth');
+const { validateBody } = require('../middlewares/validate');
+
+// importing reuired validation joi schemas
+const { authSchema } = require('../validation/schemas');
 
 // 1-> route to sign into the app and get token
-authRouter.post('/login', loginController);
+authRouter.post('/login', validateBody(authSchema), loginController);
 
 module.exports = authRouter;

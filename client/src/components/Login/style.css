@@ -6,7 +6,6 @@
   width: 50%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-
   position: absolute;
   top: 50%;
   left: 50%;
@@ -43,7 +42,7 @@
 
 .login .login-form {
   height: 100%;
-  background-color: #474a59;
+  background-color: #0088cc;
 }
 .login .login-form form {
   margin: 3rem 3rem;
@@ -52,13 +51,13 @@
   height: 76px;
 }
 .login .login-form label {
-  color: #9e9e9e;
+  color: #96dbfd;
 }
 .login .login-form input {
   height: 30px;
   border-radius: 10px;
   width: 95%;
-  background-color: #343742;
+  background-color: #1a9fe2;
   border: 0px solid;
   color: white;
   padding: 0px 10px;
@@ -71,8 +70,8 @@
 .login .login-form input[type='submit']:hover {
   box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
-  /* color: #474a59; */
-  background-color: #474a59;
+  /* color: #0088cc; */
+  background-color: #0088cc;
 }
 .login .login-form p {
   color: #ffffff;

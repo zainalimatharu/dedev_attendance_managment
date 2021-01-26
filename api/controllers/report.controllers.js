@@ -45,7 +45,7 @@ const todayReport = async (req, res, next) => {
         $project: {
           _id: 1,
           name: 1,
-          today: 1,
+          today: { $arrayElemAt: ['$today', 0] },
         },
       },
     ]);
@@ -178,10 +178,8 @@ const myTimeSheet = async (req, res, next) => {
             timeWorked: {
               $sum: {
                 $subtract: [
-                  // '$departureTime',
                   {
                     $cond: {
-                      // if: [{ $type: '$departureTime' }, 'missing'],
                       if: { $ne: [{ $type: '$departureTime' }, 'missing'] },
                       then: '$departureTime',
                       else: {
@@ -207,6 +205,7 @@ const myTimeSheet = async (req, res, next) => {
               $addToSet: {
                 _id: '$_id',
                 arrivalTime: '$arrivalTime',
+                date: '$date',
                 eventId: '$eventId',
                 status: '$status',
                 departureTime: {
@@ -253,6 +252,22 @@ const myTimeSheet = async (req, res, next) => {
             totalSalary: {
               $multiply: ['$minutesWorked', '$user.salaryPerMinute'],
             },
+          },
+        },
+        // state 6 -> unwind "daysAppeared" array to sort
+        { $unwind: { path: '$daysAppeared' } },
+        // state 7 -> sort "daysAppeared" in ascending order
+        { $sort: { 'daysAppeared.date': 1 } },
+        // stage 8 -> group again
+        {
+          $group: {
+            _id: '$_id',
+            name: { $first: '$name' },
+            salaryPerMinute: { $first: '$salaryPerMinute' },
+            minutesWorked: { $first: '$minutesWorked' },
+            numOfDaysAppeared: { $first: '$numOfDaysAppeared' },
+            totalSalary: { $first: '$totalSalary' },
+            daysAppeared: { $push: '$daysAppeared' },
           },
         },
       ]);

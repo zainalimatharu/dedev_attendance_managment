@@ -3,6 +3,7 @@ import {
   SET_USERBYID,
   SETUSER_LOADING,
   LOGOUT,
+  CLEAR_USER_REDUCER,
 } from '../actions/types';
 
 const initialState = {
@@ -30,6 +31,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: payload,
+      };
+    case CLEAR_USER_REDUCER:
+      return {
+        users: [],
+        user: {},
+        loading: true,
       };
     case LOGOUT:
       return {

@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Login from './Login/Login';
 import AddEmployee from './AddEmployee/AddEmployee';
 import Loading from '../components/Loading/Loading';
-import Dashboard from './Dashboard/Dashboard';
+// import Dashboard from './Dashboard/Dashboard';
+import NewDashboard from './NewDashboard/NewDashboard';
 import EditProfile from './EditProfile/EditProfile';
 import Employees from './Employees/Employees';
-import Reports from './Reports/Reports';
+// import Reports from './Reports/Reports';
+import NewReports from './NewReports/NewReports';
+import Attendance from './Attendance/Attendance';
 
-const Router = ({ auth: { user, isAuthenticated, systemRole, loading } }) => {
+const Router = ({ auth: { systemRole, isAuthenticated, loading } }) => {
   return (
     <Switch>
       {/* home route */}
@@ -19,10 +22,12 @@ const Router = ({ auth: { user, isAuthenticated, systemRole, loading } }) => {
         render={() =>
           loading ? (
             <Loading loading={loading} />
-          ) : isAuthenticated ? (
-            <Redirect to="/dashboard" />
+          ) : isAuthenticated && systemRole === 'admin' ? (
+            <Redirect to="/reports" />
+          ) : isAuthenticated && systemRole === 'employee' ? (
+            <Redirect to="/attendance" />
           ) : (
-            <Redirect to="/login" />
+            <Login />
           )
         }
       />
@@ -33,8 +38,10 @@ const Router = ({ auth: { user, isAuthenticated, systemRole, loading } }) => {
         render={() =>
           loading ? (
             <Loading loading={loading} />
-          ) : isAuthenticated ? (
-            <Redirect to="/dashboard" />
+          ) : isAuthenticated && systemRole === 'admin' ? (
+            <Redirect to="/reports" />
+          ) : isAuthenticated && systemRole === 'employee' ? (
+            <Redirect to="/attendance" />
           ) : (
             <Login />
           )
@@ -43,7 +50,7 @@ const Router = ({ auth: { user, isAuthenticated, systemRole, loading } }) => {
       {/* addEmployee route */}
       <Route
         exact
-        path="/addEmployee"
+        path="/addUser"
         render={() =>
           loading ? (
             <Loading loading={loading} />
@@ -62,9 +69,9 @@ const Router = ({ auth: { user, isAuthenticated, systemRole, loading } }) => {
           loading ? (
             <Loading loading={loading} />
           ) : isAuthenticated && systemRole === 'admin' ? (
-            <Dashboard />
+            <NewDashboard />
           ) : isAuthenticated && systemRole === 'employee' ? (
-            <Dashboard />
+            <NewDashboard />
           ) : (
             <Redirect to="/login" />
           )
@@ -73,7 +80,7 @@ const Router = ({ auth: { user, isAuthenticated, systemRole, loading } }) => {
       {/* editProfile route */}
       <Route
         exact
-        path="/editProfile/:userId"
+        path="/profile/:userId"
         render={() =>
           loading ? (
             <Loading loading={loading} />
@@ -84,10 +91,24 @@ const Router = ({ auth: { user, isAuthenticated, systemRole, loading } }) => {
           )
         }
       />
-      {/* employees route */}
+      {/* attendance route */}
       <Route
         exact
-        path="/employees"
+        path="/attendance"
+        render={() =>
+          loading ? (
+            <Loading loading={loading} />
+          ) : isAuthenticated ? (
+            <Attendance />
+          ) : (
+            <Redirect to="/login" />
+          )
+        }
+      />
+      {/* team route */}
+      <Route
+        exact
+        path="/team"
         render={() =>
           loading ? (
             <Loading loading={loading} />
@@ -106,7 +127,7 @@ const Router = ({ auth: { user, isAuthenticated, systemRole, loading } }) => {
           loading ? (
             <Loading loading={loading} />
           ) : isAuthenticated && systemRole === 'admin' ? (
-            <Reports />
+            <NewReports />
           ) : (
             <Redirect to="/login" />
           )

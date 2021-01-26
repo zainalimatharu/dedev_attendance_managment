@@ -4,7 +4,10 @@ import { withRouter } from 'react-router-dom';
 import { addUser } from '../../redux/actions/user';
 // import './style.css';
 
-const AddEmployee = ({ addUser, history }) => {
+// importing required redux actions
+import { setOpenPage } from '../../redux/actions/navigation';
+
+const AddEmployee = ({ addUser, history, setOpenPage }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,6 +22,7 @@ const AddEmployee = ({ addUser, history }) => {
 
   useEffect(() => {
     document.title = 'Add Employee | DeDev Technologies';
+    setOpenPage('addUser');
   }, []);
 
   // on change handler
@@ -172,4 +176,4 @@ const AddEmployee = ({ addUser, history }) => {
   );
 };
 
-export default connect(null, { addUser })(withRouter(AddEmployee));
+export default connect(null, { addUser, setOpenPage })(withRouter(AddEmployee));

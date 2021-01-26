@@ -8,6 +8,7 @@ import {
   AUTH_ERROR,
   SET_USERBYID,
   SETUSER_LOADING,
+  CLEAR_USER_REDUCER,
 } from './types';
 
 // importing URL
@@ -84,13 +85,11 @@ const updateUser = (data, userId, history) => async (dispatch) => {
       config
     );
 
-    // if (res.status === 200 && res.data.message === 'user updated') {
-    //   dispatch({ type: SET_USER, payload: res.data.user });
-    // }
+    if (res.status === 200 && res.data.message === 'user updated') {
+      dispatch({ type: SET_USERBYID, payload: res.data.user });
+    }
 
     dispatch(setAlert(`${res.data.user.name} updated`, 'success'));
-
-    history.push('/dashboard');
   } catch (error) {
     dispatch(setAlert(`Error occurred`, 'danger'));
 
@@ -125,6 +124,10 @@ const setLoading = (payload) => (dispatch) => {
   dispatch({ type: SETUSER_LOADING, payload });
 };
 
+const clearUser = () => (dispatch) => {
+  dispatch({ type: CLEAR_USER_REDUCER });
+};
+
 export {
   getUser,
   getUserById,
@@ -133,4 +136,5 @@ export {
   updateUser,
   addUser,
   setLoading,
+  clearUser,
 };

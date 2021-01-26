@@ -3,6 +3,7 @@ import {
   SET_MYDAY,
   SET_LOADING,
   SET_TODAY_REPORT,
+  SET_MYREPORT,
   SET_CUSTOMIZED_REPORT,
   SET_REPORT_LOADING,
   CLEAR_REPORT,
@@ -12,11 +13,12 @@ import {
 } from '../actions/types';
 
 const initialState = {
-  myTimeSheet: null,
-  presentToday: null,
+  me: {
+    presentToday: null,
+    myReport: null,
+  },
   todayReport: null,
   customizedReport: null,
-  today: null,
   loading: true,
 };
 
@@ -25,39 +27,37 @@ export default function (state = initialState, action) {
   switch (type) {
     case SET_LOADING:
       return { ...state, loading: payload };
-    case SET_MYDAY:
-      return {
-        ...state,
-        today: payload.today,
-        presentToday: payload.presentToday,
-      };
     case SET_TODAY_REPORT:
       return {
         ...state,
-        todayReport: payload.today,
+        todayReport: payload,
         loading: false,
       };
     case SET_CUSTOMIZED_REPORT:
       return {
         ...state,
-        customizedReport: payload.thisMonth,
+        customizedReport: payload,
         loading: false,
       };
-    case SET_MYTIMESHEET:
+    case SET_MYREPORT:
       return {
         ...state,
-        myTimeSheet: payload.myTimeSheet,
+        me: {
+          ...state.me,
+          presentToday: payload.presentToday,
+          myReport: payload.myReport,
+        },
         loading: false,
       };
     case LOGOUT:
     case CLEAR_REPORT:
       return {
-        ...state,
-        myTimeSheet: null,
-        presentToday: null,
+        me: {
+          presentToday: null,
+          myReport: null,
+        },
         todayReport: null,
         customizedReport: null,
-        today: null,
         loading: true,
       };
     case CLEAR_TODAY_REPORT:

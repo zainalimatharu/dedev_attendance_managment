@@ -1,0 +1,9 @@
+.MuiPickersStaticWrapper-staticWrapperRoot {
+  background-color: transparent !important;
+}
+.MuiPickersToolbar-toolbar {
+  background-color: #e4eaee !important;
+}
+.MuiPickersToolbarText-toolbarTxt {
+  color: #37474f !important;
+}

@@ -10,10 +10,19 @@ const setDepartureController = require('../controllers/attendance.controllers')
 
 // importing required middlewares
 const auth = require('../middlewares/auth');
+const { validateBody } = require('../middlewares/validate');
+
+// importing reuired validation joi schemas
+const { attendanceSchema } = require('../validation/schemas');
 
 // 1-> set arrival time of a user (either be an employee or ad admin)
 // 2-> set departure time of a user (either be an employee or ad admin)
-durationRouter.post('/arrival/:userId', auth, setArrivalController);
+durationRouter.post(
+  '/arrival/:userId',
+  auth,
+  validateBody(attendanceSchema),
+  setArrivalController
+);
 durationRouter.post('/departure/:userId', auth, setDepartureController);
 
 module.exports = durationRouter;

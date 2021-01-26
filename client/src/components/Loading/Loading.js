@@ -1,12 +1,12 @@
 import React from 'react';
 import './style.css';
-import loader from './loader.gif';
+import Ripples from './Ripples.gif';
 
 const Loading = () => {
   return (
     <div className="loader">
       <div className="container">
-        <img src={loader} alt="loading..." />
+        <img src={Ripples} alt="loading..." />
       </div>
     </div>
   );

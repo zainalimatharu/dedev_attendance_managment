@@ -6,17 +6,17 @@ import moment from 'moment';
 import { URL } from './keys';
 
 // import required actions from sibling action files
-import { getToday } from './report';
+import { getMyReport } from './report';
 
 // set arrival time of user
-const setArrival = (arrivalTime, userId) => async (dispatch) => {
+const setArrival = (arrivalTime, userId, userName) => async (dispatch) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
 
-  const body = JSON.stringify({ arrivalTime });
+  const body = JSON.stringify({ arrivalTime, userName });
 
   try {
     const res = await axios.post(
@@ -26,7 +26,7 @@ const setArrival = (arrivalTime, userId) => async (dispatch) => {
     );
 
     dispatch(
-      getToday({
+      getMyReport({
         userId,
         gte: moment().startOf('day').utc(true)._d,
         lte: moment().endOf('day').utc(true)._d,
@@ -39,14 +39,16 @@ const setArrival = (arrivalTime, userId) => async (dispatch) => {
 };
 
 // set departure time of user
-const setDeparture = (departureTime, userId) => async (dispatch) => {
+const setDeparture = (departureTime, userId, eventId, userName) => async (
+  dispatch
+) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
 
-  const body = JSON.stringify({ departureTime });
+  const body = JSON.stringify({ departureTime, eventId, userName });
 
   try {
     const res = await axios.post(
@@ -56,7 +58,7 @@ const setDeparture = (departureTime, userId) => async (dispatch) => {
     );
 
     dispatch(
-      getToday({
+      getMyReport({
         userId,
         gte: moment().startOf('day').utc(true)._d,
         lte: moment().endOf('day').utc(true)._d,

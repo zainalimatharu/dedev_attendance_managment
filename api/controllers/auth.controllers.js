@@ -1,12 +1,16 @@
 // importing required packages and modules
 const bcrypt = require('bcrypt');
+const joi = require('joi');
 const jwt = require('jsonwebtoken');
 
 // importing secret keys
 const jwtSecret = require('../config/default.json').jwtSecret;
 
-// importing required models
+// importing required mongodb schema models
 const User = require('../models/user.model');
+
+// importing reuired validation joi schemas
+const { authSchema } = require('../validation/schemas');
 
 // login user => admin or eomployee and generate jwt Token
 const login = async (req, res, next) => {
