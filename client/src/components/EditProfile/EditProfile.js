@@ -5,16 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Save, EditOutlined } from '@material-ui/icons';
-import {
-  Box,
-  Grid,
-  Container,
-  Typography,
-  Paper,
-  TextField,
-  Button,
-  Chip,
-} from '@material-ui/core';
+import { Grid, Typography, Paper, TextField, Button, Chip } from '@material-ui/core';
 
 // importing required redux actions
 import { updateUser, getUserById, clearUser } from '../../redux/actions/user';
@@ -39,8 +30,7 @@ const useStyles = makeStyles((theme) => ({
   h_1_a: {
     fontSize: '2.52rem',
     fontWeight: 'bold',
-    fontFamily:
-      '-apple-system, BlinkMacSystemFont, San Francisco, Helvetica Neue, Helvetica, Ubuntu, Roboto, Noto, Segoe UI, Arial, sans-serif',
+    fontFamily: '-apple-system, BlinkMacSystemFont, San Francisco, Helvetica Neue, Helvetica, Ubuntu, Roboto, Noto, Segoe UI, Arial, sans-serif',
     marginBottom: '7px',
   },
   paper: {
@@ -145,14 +135,8 @@ const EditProfile = ({
       name: loading || !user.name ? '' : user.name.split('_').join(' '),
       email: loading || !user.email ? '' : user.email,
       bio: loading || !user.bio ? '' : user.bio,
-      linkedIn:
-        loading || !user.social || !user.social.linkedIn
-          ? ''
-          : user.social.linkedIn,
-      github:
-        loading || !user.social || !user.social.github
-          ? ''
-          : user.social.github,
+      linkedIn: loading || !user.social || !user.social.linkedIn ? '' : user.social.linkedIn,
+      github: loading || !user.social || !user.social.github ? '' : user.social.github,
       admin: loading || !user.admin ? false : user.admin,
     });
 
@@ -163,8 +147,7 @@ const EditProfile = ({
   }, [user]);
 
   // on change handler
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   // on submit handler
   const onSubmit = async (e) => {
@@ -209,22 +192,10 @@ const EditProfile = ({
   ) : (
     <Grid container className={classes.root} variant="outlined">
       {!loading && user.name && (
-        <Profile
-          name={user.name}
-          bio={user.bio ? user.bio : 'No bio'}
-          skills={user.skills}
-          showEditBtn={false}
-          hasPad={true}
-        />
+        <Profile name={user.name} bio={user.bio ? user.bio : 'No bio'} skills={user.skills} showEditBtn={false} hasPad={true} />
       )}
 
-      <Grid
-        container
-        component={Paper}
-        elevation={0}
-        square
-        className={classes.container}
-      >
+      <Grid container component={Paper} elevation={0} square className={classes.container}>
         <Grid item xs={12} container spacing={2} className={classes.heading}>
           <Grid item>
             <EditOutlined />
@@ -294,22 +265,13 @@ const EditProfile = ({
             <Paper component="ul" elevation={0} className={classes.skills}>
               {skills.map((skill, idx) => (
                 <li key={idx}>
-                  <Chip
-                    label={skill}
-                    onDelete={handleSkillDelete(skill)}
-                    className={classes.chip}
-                  />
+                  <Chip label={skill} onDelete={handleSkillDelete(skill)} className={classes.chip} />
                 </li>
               ))}
             </Paper>
           </Grid>
           <Grid item xs={12}>
-            <Typography
-              variant="button"
-              display="block"
-              className={classes.social}
-              onClick={() => setSocialVisibility(!socialVisibility)}
-            >
+            <Typography variant="button" display="block" className={classes.social} onClick={() => setSocialVisibility(!socialVisibility)}>
               Add social accounts
             </Typography>
           </Grid>
@@ -355,11 +317,7 @@ const EditProfile = ({
                 Save
               </Button>
             ) : (
-              <Button
-                variant="outlined"
-                size="large"
-                className={classes.btnClicked}
-              >
+              <Button variant="outlined" size="large" className={classes.btnClicked}>
                 Updating...
               </Button>
             )}
