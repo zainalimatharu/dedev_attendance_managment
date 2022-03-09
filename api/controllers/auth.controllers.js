@@ -16,11 +16,9 @@ const { authSchema } = require('../validation/schemas');
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email: email.toString() });
     if (!user) {
-      return res
-        .status(400)
-        .json({ message: 'Invalid Email & Password combination' });
+      return res.status(400).json({ message: 'Invalid Email & Password combination' });
     }
 
     const isMatched = await bcrypt.compare(password, user.password);
@@ -36,17 +34,10 @@ const login = async (req, res, next) => {
       admin: user.admin ? user.admin : false,
     };
 
-    jwt.sign(
-      payload,
-      jwtSecret,
-      { expiresIn: 24 * 60 * 60 * 1000 },
-      (err, token) => {
-        if (err) throw err;
-        res
-          .status(200)
-          .json({ message: 'Auth successful', admin: payload.admin, token });
-      }
-    );
+    jwt.sign(payload, jwtSecret, { expiresIn: 24 * 60 * 60 * 1000 }, (err, token) => {
+      if (err) throw err;
+      res.status(200).json({ message: 'Auth successful', admin: payload.admin, token });
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
