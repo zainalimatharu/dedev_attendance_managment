@@ -1,13 +1,13 @@
 // importing react stuff
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import moment from 'moment';
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import moment from "moment";
 
 // importing required redux actions
-import { getTodayReport, clearReport } from '../../redux/actions/report';
+import { getTodayReport, clearReport } from "../../redux/actions/report";
 
 // importing required components
-import Loading from '../Loading/Loading';
+import Loading from "../Loading/Loading";
 
 // importing material-ui stuff
 import {
@@ -19,42 +19,42 @@ import {
   TableHead,
   TableRow,
   Grid,
-} from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
-import { makeStyles } from '@material-ui/core/styles';
+} from "@material-ui/core";
+import { Pagination } from "@material-ui/lab";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
   },
   tableContainer: {
-    marginTop: '35px',
+    marginTop: "35px",
   },
   table: {
-    border: '1px solid #c6d2d9',
+    border: "1px solid #c6d2d9",
   },
   tableHead: {
-    backgroundColor: '#e4eaee',
+    backgroundColor: "#e4eaee",
   },
   tableHeading: {
-    fontWeight: '600',
-    '@media (max-width: 768px)': {
-      fontSize: '0.6rem',
+    fontWeight: "600",
+    "@media (max-width: 768px)": {
+      fontSize: "0.6rem",
     },
   },
   tableCell: {
-    '@media (max-width: 768px)': {
-      fontSize: '0.6rem',
+    "@media (max-width: 768px)": {
+      fontSize: "0.6rem",
     },
   },
   tableData: {
-    '@media (max-width: 768px)': {
-      fontSize: '0.6rem',
+    "@media (max-width: 768px)": {
+      fontSize: "0.6rem",
     },
   },
   pagination: {
-    justifyContent: 'flex-end',
-    marginTop: '15px',
+    justifyContent: "flex-end",
+    marginTop: "15px",
   },
 });
 
@@ -93,21 +93,21 @@ const Today = ({
       <TableCell className={tableData} align="center">
         {user.today
           ? user.today.absent
-            ? 'Present'
+            ? "Present"
             : user.today.leave
-            ? 'Leave'
-            : 'Present'
-          : 'Not Arrived Yet'}
+            ? "Leave"
+            : "Present"
+          : "Not Arrived Yet"}
       </TableCell>
       <TableCell className={tableData} align="center">
         {user.today
-          ? moment(user.today.arrivalTime).utc().format('hh:mm A')
-          : '--'}
+          ? moment(user.today.arrivalTime).utc().format("hh:mm A")
+          : "--"}
       </TableCell>
       <TableCell className={tableData} align="right">
         {user.today && user.today.departureTime
-          ? moment(user.departureTime).utc().format('hh:mm A')
-          : '--'}
+          ? moment(user.departureTime).utc().format("hh:mm A")
+          : "--"}
       </TableCell>
     </TableRow>
   );
@@ -151,7 +151,6 @@ const Today = ({
           count={noOfPages}
           page={page}
           onChange={handleChangePage}
-          defaultPage={1}
         />
       </Grid>
     </div>

@@ -1,7 +1,7 @@
 // importing react stuff
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import moment from 'moment';
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import moment from "moment";
 
 // importing material-ui stuff
 import {
@@ -13,53 +13,53 @@ import {
   TableHead,
   TableRow,
   Grid,
-} from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
-import { makeStyles } from '@material-ui/core/styles';
+} from "@material-ui/core";
+import { Pagination } from "@material-ui/lab";
+import { makeStyles } from "@material-ui/core/styles";
 
 // importing components
-import Loading from '../Loading/Loading';
+import Loading from "../Loading/Loading";
 
 // importing required redux actions
 import {
   clearReport,
   getMyReport,
   setReportLoading,
-} from '../../redux/actions/report';
-import NoData from '../NoData/NoData';
+} from "../../redux/actions/report";
+import NoData from "../NoData/NoData";
 
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
   },
   tableContainer: {
-    marginTop: '35px',
+    marginTop: "35px",
   },
   table: {
-    border: '1px solid #c6d2d9',
+    border: "1px solid #c6d2d9",
   },
   tableHead: {
-    backgroundColor: '#e4eaee',
+    backgroundColor: "#e4eaee",
   },
   tableHeading: {
-    fontWeight: '600',
-    '@media (max-width: 768px)': {
-      fontSize: '0.6rem',
+    fontWeight: "600",
+    "@media (max-width: 768px)": {
+      fontSize: "0.6rem",
     },
   },
   tableCell: {
-    '@media (max-width: 768px)': {
-      fontSize: '0.6rem',
+    "@media (max-width: 768px)": {
+      fontSize: "0.6rem",
     },
   },
   tableData: {
-    '@media (max-width: 768px)': {
-      fontSize: '0.6rem',
+    "@media (max-width: 768px)": {
+      fontSize: "0.6rem",
     },
   },
   pagination: {
-    justifyContent: 'flex-end',
-    marginTop: '15px',
+    justifyContent: "flex-end",
+    marginTop: "15px",
   },
 });
 
@@ -92,7 +92,7 @@ const ReportTable = ({
         userId: user._id,
         gte: timeSpan.gte,
         lte: timeSpan.lte,
-        message: 'Record Not Found',
+        message: "Record Not Found",
       });
     } else {
       setReportLoading(false);
@@ -100,7 +100,7 @@ const ReportTable = ({
 
     return function cleanUp() {
       clearReport();
-      console.log('unmounting');
+      console.log("unmounting");
     };
   }, [getMyReport, clearReport]);
 
@@ -111,18 +111,18 @@ const ReportTable = ({
   const row = (day, idx) => (
     <TableRow key={idx}>
       <TableCell className={tableData}>
-        {moment(day.date).format('ddd - MMM DD, YYYY')}
+        {moment(day.date).format("ddd - MMM DD, YYYY")}
       </TableCell>
       <TableCell className={tableData} align="center">
-        {day.absent ? 'Absent' : day.leave ? 'Leave' : 'Present'}
+        {day.absent ? "Absent" : day.leave ? "Leave" : "Present"}
       </TableCell>
       <TableCell className={tableData} align="center">
-        {moment(day.arrivalTime).utc().format('hh:mm A')}
+        {moment(day.arrivalTime).utc().format("hh:mm A")}
       </TableCell>
       <TableCell className={tableData} align="right">
         {day.departureTime
-          ? moment(day.departureTime).utc().format('hh:mm A')
-          : '--'}
+          ? moment(day.departureTime).utc().format("hh:mm A")
+          : "--"}
       </TableCell>
     </TableRow>
   );
@@ -167,7 +167,6 @@ const ReportTable = ({
               count={noOfPages}
               page={page}
               onChange={handleChangePage}
-              defaultPage={1}
             />
           </Grid>
         </>
