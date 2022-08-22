@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const moment = require('moment');
+const moment = require("moment");
 
 const attendanceSchema = Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'user',
+    ref: "user",
     required: true,
   },
   date: { type: Date, required: true },
@@ -22,4 +22,6 @@ const attendanceSchema = Schema({
 //   next();
 // });
 
-module.exports = Attendance = mongoose.model('workduration', attendanceSchema);
+const Attendance = mongoose.model("workduration", attendanceSchema);
+
+module.exports = Attendance;

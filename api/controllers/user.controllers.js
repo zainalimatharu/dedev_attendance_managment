@@ -1,21 +1,21 @@
 // importing required packages and modules
-const bcrypt = require('bcrypt');
-const joi = require('joi');
+const bcrypt = require("bcrypt");
+const joi = require("joi");
 
 // importing required Validation Error Messages
-const { INVALID_EMAIL, REQUIRED, MINMAX } = require('../validation/errorTexts');
+const { INVALID_EMAIL, REQUIRED, MINMAX } = require("../validation/errorTexts");
 const {
   updateUserSchema,
   addEmployeeSchema,
-} = require('../validation/schemas');
+} = require("../validation/schemas");
 
 // importing required models
-const User = require('../models/user.model');
+const User = require("../models/user.model");
 
 // get a user
 const getUser = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id).select('-password -__v');
+    const user = await User.findById(req.user.id).select("-password -__v");
 
     res.status(200).json(user);
   } catch (error) {
@@ -31,14 +31,14 @@ const getUserById = async (req, res, next) => {
 
     if (req.user.id === userId || req.user.admin) {
       const user = await User.findById(req.params.userId).select(
-        '-password -__v'
+        "-password -__v"
       );
 
-      if (!user) return res.status(500).json({ message: 'User Not Found' });
+      if (!user) return res.status(500).json({ message: "User Not Found" });
 
       res.status(200).json(user);
     } else {
-      res.status(500).json({ message: 'Not Authorized' });
+      res.status(500).json({ message: "Not Authorized" });
     }
   } catch (error) {
     console.log(error);
@@ -49,10 +49,10 @@ const getUserById = async (req, res, next) => {
 // get all users
 const getUsers = async (req, res, next) => {
   try {
-    const users = await User.find({ admin: false }).select('-password -__v');
+    const users = await User.find({ admin: false }).select("-password -__v");
 
     if (users.length < 1)
-      return res.status(500).json({ message: 'No Users Found' });
+      return res.status(500).json({ message: "No Users Found" });
 
     res.status(200).json({ count: users.length, users });
   } catch (error) {
@@ -64,16 +64,8 @@ const getUsers = async (req, res, next) => {
 // create an employee
 const addEmployee = async (req, res, next) => {
   try {
-    const {
-      name,
-      email,
-      password,
-      admin,
-      bio,
-      salary,
-      skills,
-      image,
-    } = req.body;
+    const { name, email, password, admin, bio, salary, skills, image } =
+      req.body;
 
     // ---> Validation start <---
     const error1 = addEmployeeSchema.validate(
@@ -95,11 +87,11 @@ const addEmployee = async (req, res, next) => {
     }
     // ---> Validation end <---
 
-    const user = await User.findOne({ email }).select('name email _id');
+    const user = await User.findOne({ email }).select("name email _id");
 
     // if user with email provided by client already exists => return a response
     if (user) {
-      return res.status(409).json({ message: 'User already exists' });
+      return res.status(409).json({ message: "User already exists" });
     }
 
     // if user with email provided by client doesn't already exists => proceed to add Employee
@@ -113,7 +105,7 @@ const addEmployee = async (req, res, next) => {
     userFields.admin = admin;
     if (bio) userFields.bio = bio;
     if (skills)
-      userFields.skills = skills.split(',').map((skill) => skill.trim());
+      userFields.skills = skills.split(",").map((skill) => skill.trim());
     if (salary) userFields.salary = salary;
     if (image) userFields.image = image;
 
@@ -121,7 +113,7 @@ const addEmployee = async (req, res, next) => {
 
     newUser = await newUser.save();
     res.status(201).json({
-      message: 'Employee created',
+      message: "Employee created",
       createdEmployee: {
         _id: newUser._id,
         name: newUser.name,
@@ -144,7 +136,7 @@ const updateUser = async (req, res, next) => {
     let user = await User.findOne({ _id: userId });
 
     if (!user) {
-      return res.status(404).json({ message: 'user does not exist' });
+      return res.status(404).json({ message: "user does not exist" });
     }
 
     const {
@@ -182,7 +174,6 @@ const updateUser = async (req, res, next) => {
 
     if (password) {
       const salt = await bcrypt.genSalt(10);
-      const encryptedPassword = await bcrypt.hash(password, salt);
     }
 
     let userFields = {};
@@ -206,7 +197,7 @@ const updateUser = async (req, res, next) => {
       { new: true }
     );
 
-    res.status(200).json({ message: 'user updated', user: updatedUser });
+    res.status(200).json({ message: "user updated", user: updatedUser });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
