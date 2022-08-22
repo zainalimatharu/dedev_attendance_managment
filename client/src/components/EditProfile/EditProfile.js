@@ -209,7 +209,7 @@ const EditProfile = ({
       {!loading && user.name && (
         <Profile
           name={user.name}
-          bio={user.bio ? user.bio : "No bio"}
+          bio={user.bio || "No bio"}
           skills={user.skills}
           showEditBtn={false}
           hasPad={true}
@@ -252,7 +252,7 @@ const EditProfile = ({
               error={errors.email ? true : false}
               label="Email"
               value={formData.email}
-              helperText={errors.email && errors.email}
+              helperText={!!errors.email}
               name="email"
               onChange={(e) => onChange(e)}
               onBlur={(e) => onBlur(e)}
@@ -267,7 +267,7 @@ const EditProfile = ({
               label="Bio"
               value={formData.bio}
               placeholder="e.g. creates beautiful Reactjs UIs"
-              helperText={errors.bio && errors.bio}
+              helperText={!!errors.bio}
               name="bio"
               onChange={(e) => onChange(e)}
             />
@@ -282,7 +282,7 @@ const EditProfile = ({
                 label="Skills"
                 type="text"
                 placeholder="add a skill and press Enter"
-                // helperText={errors.skills && errors.skills}
+                // helperText={!! errors.skills }
                 name="ChipSkills"
               />
             </form>
@@ -320,7 +320,7 @@ const EditProfile = ({
                   label="LinkedIn"
                   value={formData.linkedIn}
                   placeholder="e.g. https://www.linkedin.com/in/username"
-                  helperText={errors.linkedIn && errors.linkedIn}
+                  helperText={!!errors.linkedIn}
                   name="linkedIn"
                   onChange={(e) => onChange(e)}
                 />
@@ -332,7 +332,7 @@ const EditProfile = ({
                   label="Github"
                   value={formData.github}
                   placeholder="e.g. https://github.com/username"
-                  helperText={errors.github && errors.github}
+                  helperText={!!errors.github}
                   name="github"
                   onChange={(e) => onChange(e)}
                 />
