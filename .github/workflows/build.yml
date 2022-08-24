@@ -5,6 +5,7 @@ on:
       - main
       - stag*
       - branch*
+      - release*
 
   pull_request:
     types: [opened, synchronize, reopened]
