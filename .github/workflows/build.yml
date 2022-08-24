@@ -3,8 +3,8 @@ on:
   push:
     branches:
       - main
-      - stag_*
-      - dev_*
+      - stag*
+      - dev*
 
   pull_request:
     types: [opened, synchronize, reopened]
