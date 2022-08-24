@@ -4,8 +4,7 @@ on:
     branches:
       - main
       - stag*
-      - branch*
-      - release*
+      - dev*
 
   pull_request:
     types: [opened, synchronize, reopened]
