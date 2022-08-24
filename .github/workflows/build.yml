@@ -1,7 +1,10 @@
 name: Build
 on:
   push:
-    branches: [main, staging]
+    branches:
+      - main
+      - stag_*
+      - dev_*
 
   pull_request:
     types: [opened, synchronize, reopened]
