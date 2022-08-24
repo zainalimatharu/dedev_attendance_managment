@@ -87,7 +87,9 @@ const addEmployee = async (req, res, next) => {
     }
     // ---> Validation end <---
 
-    const user = await User.findOne({ email }).select("name email _id");
+    const user = await User.findOne({ email: email.toString() }).select(
+      "name email _id"
+    );
 
     // if user with email provided by client already exists => return a response
     if (user) {
