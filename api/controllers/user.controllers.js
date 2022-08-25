@@ -93,6 +93,12 @@ const addEmployee = async (req, res, next) => {
 
     // dummy comments
 
+    let abc = true;
+
+    if (abc) {
+      let abc = false;
+    }
+
     // if user with email provided by client already exists => return a response
     if (user) {
       return res.status(409).json({ message: "User already exists" });
