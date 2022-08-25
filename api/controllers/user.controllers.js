@@ -91,7 +91,7 @@ const addEmployee = async (req, res, next) => {
       "name email _id"
     );
 
-    // comments
+    // dummy comments
 
     // if user with email provided by client already exists => return a response
     if (user) {
